@@ -22,6 +22,8 @@ struct Buffer
 	char buff[BUFFER_SIZE];
 };
 
+#include <fstream>
+std::fstream
 
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
@@ -59,7 +61,7 @@ int main(int argc, char** argv) {
 	ft::vector<int> vector_int;
 	ft::stack<int> stack_int;
 	ft::vector<Buffer> vector_buffer;
-	ft::stack<Buffer, std::deque<int> > stack_deq_buffer;
+	// ft::stack<Buffer, std::deque<int> > stack_deq_buffer;
 	ft::map<int, int> map_int;
 
 	for (int i = 0; i < COUNT; i++)
