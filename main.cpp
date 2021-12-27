@@ -14,6 +14,10 @@
 
 #include <stdlib.h>
 
+/*
+**  최대 RAM 크기는 2^32 즉 4기가 바이트
+**  버퍼 사이즈는 4키로 바이트
+*/
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096
 struct Buffer
@@ -22,8 +26,11 @@ struct Buffer
 	char buff[BUFFER_SIZE];
 };
 
-
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
+
+/*
+**  std::stack은 iterator가 없지만, main.cpp에서 제공하는 MutantStack은 iterator를 만들었다.
+*/
 
 template<typename T>
 class MutantStack : public ft::stack<T>
@@ -44,23 +51,20 @@ public:
 	iterator end() { return this->c.end(); }
 };
 
-int main(int argc, char** argv) {
-	if (argc != 2)
-	{
-		std::cerr << "Usage: ./test seed" << std::endl;
-		std::cerr << "Provide a seed please" << std::endl;
-		std::cerr << "Count value:" << COUNT << std::endl;
-		return 1;
-	}
-	const int seed = atoi(argv[1]);
-	srand(seed);
-
-	ft::vector<std::string> vector_str;
+void test_vector_int(void)
+{
 	ft::vector<int> vector_int;
-	ft::stack<int> stack_int;
+}
+
+void test_vector_string(void)
+{
+    ft::vector<std::string> vector_str;
+
+}
+
+void test_vector_Buffer(void)
+{
 	ft::vector<Buffer> vector_buffer;
-	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
-	ft::map<int, int> map_int;
 
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -87,6 +91,35 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
+}
+
+void test_stack_int(void)
+{
+	ft::stack<int> stack_int;
+}
+
+
+void test_stack_Buffer_dequeBuffer()
+{
+	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+}
+
+void test_mutant_stack_char(void)
+{
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;
+}
+
+void test_map_int_int()
+{
+    ft::map<int, int> map_int;
+
 	
 	for (int i = 0; i < COUNT; ++i)
 	{
@@ -104,13 +137,35 @@ int main(int argc, char** argv) {
 	{
 		ft::map<int, int> copy = map_int;
 	}
-	MutantStack<char> iterable_stack;
-	for (char letter = 'a'; letter <= 'z'; letter++)
-		iterable_stack.push(letter);
-	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+}
+
+int main(int argc, char** argv) {
+	if (argc != 2)
 	{
-		std::cout << *it;
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT << std::endl;
+		return 1;
 	}
-	std::cout << std::endl;
+	const int seed = atoi(argv[1]);
+	srand(seed);
+
+/*
+**  vector test 
+*/
+    test_vector_int();
+    test_vector_string();
+    test_vector_Buffer();
+/*
+**  stack test 
+*/
+    test_stack_int();
+    test_stack_Buffer_dequeBuffer();
+    test_mutant_stack_char();
+/*
+**  map test 
+*/
+    test_map_int_int();
+
 	return (0);
 }
