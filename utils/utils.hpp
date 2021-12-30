@@ -23,8 +23,8 @@ namespace ft
     std::string to_string(T n)
     {
         std::ostringstream os;
-        ss << n;
-        return (ss.str());
+        os << n;
+        return (os.str());
     }
 }
 
