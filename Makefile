@@ -1,6 +1,6 @@
 NAME		=	container
 CXX			=	clang++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -Iincludes
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g -Iincludes -fsanitize=address
 RM			=	rm -rf
 FILES		=	main
 
