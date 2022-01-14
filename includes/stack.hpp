@@ -17,7 +17,7 @@ namespace ft
         public:
             explicit stack (const container_type& _c = container_type())
             :
-                c(_c);
+                c(_c)
             {}
             ~stack() {}
             bool empty() const
@@ -45,10 +45,10 @@ namespace ft
                 this->c.pop_back();
             }
             template <class T1, class C1>
-            friend bool operator== (const ft::stack<T1, C1>& x, const ft:stack<T1, C1>& y);
+            friend bool operator== (const ft::stack<T1, C1>& x, const ft::stack<T1, C1>& y);
 
             template <class T1, class C1>
-            friend bool operator< (const ft::stack<T1, C1>& x, const ft:stack<T1, C1>& y);
+            friend bool operator< (const ft::stack<T1, C1>& x, const ft::stack<T1, C1>& y);
     };
     template <class T, class Container>
     bool operator== (const ft::stack<T, Container>& x, const ft::stack<T, Container>& y)
@@ -61,9 +61,9 @@ namespace ft
         return (x.c < y.c);
     }
     template <class T, class Container>
-    bool operator== (const ft::stack<T, Container>& x, const ft::stack<T, Container>& y)
+    bool operator!= (const ft::stack<T, Container>& x, const ft::stack<T, Container>& y)
     {
-        return !(x.c == y.c);
+        return !(x == y);
     }
     template <class T, class Container>
     bool operator> (const ft::stack<T, Container>& x, const ft::stack<T, Container>& y)

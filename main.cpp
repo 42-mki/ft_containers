@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "Vector.hpp"
-// #include "Stack.hpp"
+#include "Stack.hpp"
 // #include "Map.hpp"
 
 #include <stdlib.h>
@@ -33,19 +33,42 @@ struct Buffer
 */
 
 template<typename T>
-class MutantStack : public std::stack<T>
+class std_MutantStack : public std::stack<T>
 {
 public:
-	MutantStack() {}
-	MutantStack(const MutantStack<T>& src) { *this = src; }
-	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	std_MutantStack() {}
+	std_MutantStack(const std_MutantStack<T>& src) { *this = src; }
+	std_MutantStack<T>& operator=(const std_MutantStack<T>& rhs) 
 	{
 		this->c = rhs.c;
 		return *this;
 	}
-	~MutantStack() {}
+	~std_MutantStack() {}
 
 	typedef typename std::stack<T>::container_type::iterator iterator;
+
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
+};
+
+/*
+**  std::stack은 iterator가 없지만, main.cpp에서 제공하는 MutantStack은 iterator를 만들었다.
+*/
+
+template<typename T>
+class ft_MutantStack : public ft::stack<T>
+{
+public:
+	ft_MutantStack() {}
+	ft_MutantStack(const ft_MutantStack<T>& src) { *this = src; }
+	ft_MutantStack<T>& operator=(const ft_MutantStack<T>& rhs) 
+	{
+		this->c = rhs.c;
+		return *this;
+	}
+	~ft_MutantStack() {}
+
+	typedef typename ft::stack<T>::container_type::iterator iterator;
 
 	iterator begin() { return this->c.begin(); }
 	iterator end() { return this->c.end(); }
@@ -529,24 +552,6 @@ void    test_vector(void)
         std::cout << "1 >  2 --> " << (ft_vector_1 > ft_vector_2) << "\n";
         std::cout << "1 >= 2 --> " << (ft_vector_1 >= ft_vector_2) << "\n";
     }
-    {
-        std::cout << "\n-------size test()------\n";
-        std::vector<int> std_vector;
-        std_vector.reserve(4);
-        std::vector<int>::iterator iter = std_vector.begin();
-        std::cout << "size: " << std_vector.size() << " capacity: " << std_vector.capacity() << "\n";
-        std_vector.insert(iter, 5, 5);
-        std::cout << "size: " << std_vector.size() << " capacity: " << std_vector.capacity() << "\n";
-    }
-    {
-        std::cout << "\n-------size test()------\n";
-        ft::vector<int> ft_vector;
-        ft_vector.reserve(4);
-        ft::vector<int>::iterator iter = ft_vector.begin();
-        std::cout << "size: " << ft_vector.size() << " capacity: " << ft_vector.capacity() << "\n";
-        ft_vector.insert(iter, 5, 5);
-        std::cout << "size: " << ft_vector.size() << " capacity: " << ft_vector.capacity() << "\n";
-    }
 }
 
 void    test_vector_Buffer(void)
@@ -609,26 +614,86 @@ void    test_vector_Buffer(void)
 
 void    test_stack(void)
 {
-	std::stack<int> stack_int;
+    {
+        std::cout << "\n------stack<int> 생성-------\n";
+        std::stack<int> std_stack;
+        ft::stack<int> ft_stack;
+        std::cout << "\n------stack.empty()-------\n";
+        std::cout << "std_stack.empty(): " << std_stack.empty() << "\n";
+        std::cout << "ft_stack.empty():  " << ft_stack.empty() << "\n";
+        std::cout << "\n------stack.size()-------\n";
+        std::cout << "std_stack.size(): " << std_stack.size() << "\n";
+        std::cout << "ft_stack.size():  " << ft_stack.size() << "\n";
+        // std::cout << "\n------stack.top()-------\n";
+        // std::cout << "std_stack.top(): " << std_stack.top() << "\n";
+        // std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
+        std::cout << "\n------stack.push(123)-------\n";
+        std_stack.push(123);
+        ft_stack.push(123);
+        std::cout << "\n------stack.top()-------\n";
+        std::cout << "std_stack.top(): " << std_stack.top() << "\n";
+        std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
+        std::cout << "\n------stack.push(456)-------\n";
+        std_stack.push(456);
+        ft_stack.push(456);
+        std::cout << "\n------stack.top()-------\n";
+        std::cout << "std_stack.top(): " << std_stack.top() << "\n";
+        std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
+        std::cout << "\n------stack.pop()-------\n";
+        std_stack.pop();
+        ft_stack.pop();
+        std::cout << "\n------stack.top()-------\n";
+        std::cout << "std_stack.top(): " << std_stack.top() << "\n";
+        std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
+    }
+    {
+        std::cout << "\n-------relational operators------\n";
+        ft::stack<std::string> ft_stack_1;
+        ft_stack_1.push("apple");
+        ft_stack_1.push("banana");
+        ft_stack_1.push("carrot");
+        ft::stack<std::string> ft_stack_2;
+        ft_stack_2.push("apple");
+        ft_stack_2.push("banana");
+        std::cout << "1 == 2 --> " << (ft_stack_1 == ft_stack_2) << "\n";
+        std::cout << "1 != 2 --> " << (ft_stack_1 != ft_stack_2) << "\n";
+        std::cout << "1 <  2 --> " << (ft_stack_1 < ft_stack_2) << "\n";
+        std::cout << "1 <= 2 --> " << (ft_stack_1 <= ft_stack_2) << "\n";
+        std::cout << "1 >  2 --> " << (ft_stack_1 > ft_stack_2) << "\n";
+        std::cout << "1 >= 2 --> " << (ft_stack_1 >= ft_stack_2) << "\n";
+    }
 }
 
 
-// void    test_stack_Buffer_dequeBuffer()
-// {
-// 	std::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
-// }
+void    test_stack_Buffer_dequeBuffer()
+{
+	std::stack<Buffer, std::deque<Buffer> > std_stack_deq_buffer;
+	ft::stack<Buffer, std::deque<Buffer> > ft_stack_deq_buffer;
+}
 
-// void    test_mutant_stack_char(void)
-// {
-// 	MutantStack<char> iterable_stack;
-// 	for (char letter = 'a'; letter <= 'z'; letter++)
-// 		iterable_stack.push(letter);
-// 	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
-// 	{
-// 		std::cout << *it;
-// 	}
-// 	std::cout << std::endl;
-// }
+void    test_mutant_stack_char(void)
+{
+    {
+        std_MutantStack<char> iterable_stack;
+        for (char letter = 'a'; letter <= 'z'; letter++)
+            iterable_stack.push(letter);
+        for (std_MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+        {
+            std::cout << *it;
+        }
+        std::cout << std::endl;
+    }
+    {
+        ft_MutantStack<char> iterable_stack;
+        for (char letter = 'a'; letter <= 'z'; letter++)
+            iterable_stack.push(letter);
+        for (ft_MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+        {
+            std::cout << *it;
+        }
+        std::cout << std::endl;
+    }
+}
 
 // void    test_map_int_int()
 // {
@@ -670,13 +735,13 @@ int main(int argc, char** argv) {
 **  vector test 
 */
     test_vector();
-    test_vector_Buffer();
+    // test_vector_Buffer();
 /*
 **  stack test 
 */
     test_stack();
-    // test_stack_Buffer_dequeBuffer();
-    // test_mutant_stack_char();
+    test_stack_Buffer_dequeBuffer();
+    test_mutant_stack_char();
 /*
 **  map test 
 */
