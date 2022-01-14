@@ -794,7 +794,114 @@ namespace ft
         }
         return (first1 == last1) && (first2 != last2);
     }
+    template <typename T>
+    struct BST_Node
+    {
+        public:
+            typedef T   value_type;
+
+            value_type  value;
+            BST_Node*   parent;
+            BST_Node*   left;
+            BST_Node*   right;
+
+            // 기본 생성자
+            BST_Node()
+            :
+                value(),
+                parent(u_nullptr),
+                left(u_nullptr),
+                right(u_nullptr)
+            {}
+
+            BST_Node (  BST_Node* _parent = u_nullptr,
+                        BST_Node* _left = u_nullptr,
+                        BST_Node* _right = u_nullptr)
+            :
+                value(),
+                parent(_parent),
+                left(_left),
+                right(_right)
+            {}
+
+            BST_Node (  const value_type& _val,
+                        BST_Node* _parent = u_nullptr,
+                        BST_Node* _left = u_nullptr,
+                        BST_Node* _right = u_nullptr)
+            :
+                value(_val),
+                parent(_parent),
+                left(_left),
+                right(_right)
+            {}
+
+            // 복사 생성자
+            BST_Node (const BST_Node& node)
+            :
+                value(node.value),
+                parent(node.parent),
+                left(node.left),
+                right(node.right)
+            {}
+            // 대입 연산자 오버로딩
+            BST_Node &operator=(const BST_Node& node)
+            {
+                if (node == *this)
+                    return *this;
+                this->value = node.value;
+                this->parent = node.parent;
+                this->left = node.left;
+                this->right = node.right;
+                return *this;
+            }
+            // 소멸자
+            virtual ~BST_Node() {}
+    };
     
+    template <typename T>
+    struct Doubly_Linked_List_Node
+    {
+        public:
+            Doubly_Linked_List_Node *prev;
+            Doubly_Linked_List_Node *next;
+            T                       value;
+
+            Doubly_Linked_List_Node()
+            :
+                prev(u_nullptr),
+                next(u_nullptr),
+                value()
+            {}
+            
+            Doubly_Linked_List_Node(    const T& _value,
+                                        Doubly_Linked_List_Node *prev,
+                                        Doubly_Linked_List_Node *next)
+            :
+                prev(u_nullptr),
+                next(u_nullptr),
+                value(_value)
+            {}
+
+            Doubly_Linked_List_Node(const T& _value)
+            :
+                prev(u_nullptr),
+                next(u_nullptr),
+                value(_value)
+            {}
+
+            Doubly_Linked_List_Node& operator=(Doubly_Linked_List_Node& node)
+            {
+                if (node == *this)
+                    return *this
+                this->prev = node.prev;
+                this->enxt = node.next;
+                this->value = node.value;
+                return *this
+            }
+
+            virtual ~Doubly_Linked_List_Node() {}
+    };
+    // 
 }
 
 #endif
