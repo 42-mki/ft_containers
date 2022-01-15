@@ -3,8 +3,7 @@
 
 // for std::allocator
 #include <memory>
-// for u_nullptr
-#include "../utils/Utils.hpp"
+#include "Iterator.hpp"
 
 namespace ft
 {
@@ -243,7 +242,7 @@ namespace ft
         typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr)
         {
             if (!ft::is_ft_iterator_tagged<typename ft::iterator_traits<InputIterator>::iterator_category>::value)
-                throw (ft::InvalidIteratorException<void>());
+                throw (ft::invalid_iterator_exception<void>());
             // assign은 기존 elements를 초기화한다.
             this->clear();
             size_type dist = ft::distance(first, last);
@@ -420,7 +419,7 @@ namespace ft
                     typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr)
         {
             if (!ft::is_ft_iterator_tagged<typename ft::iterator_traits<InputIterator>::iterator_category>::value)
-                throw (ft::InvalidIteratorException<void>());
+                throw (ft::invalid_iterator_exception<void>());
             size_type dist = ft::distance(first, last);
             size_type pos_len = &(*position) - m_begin;
             // vector의 남은 공간이 넉넉하다면
