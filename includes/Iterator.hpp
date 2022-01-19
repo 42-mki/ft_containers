@@ -1,12 +1,15 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
+
 # include "Utils.hpp"
-# include <stddef.h>
 
 namespace ft
 {   
-    // iterator tags
-    // https://en.cppreference.com/w/cpp/iterator/iterator_tags
+    // https://www.cplusplus.com/reference/iterator/InputIterator/
+    // https://www.cplusplus.com/reference/iterator/OutputIterator/
+    // https://www.cplusplus.com/reference/iterator/ForwardIterator/
+    // https://www.cplusplus.com/reference/iterator/BidirectionalIterator/
+    // https://www.cplusplus.com/reference/iterator/RandomAccessIterator/
     class input_iterator_tag { };
     class output_iterator_tag { };
     class forward_iterator_tag : public input_iterator_tag { };
@@ -71,8 +74,9 @@ namespace ft
         }
     };
     
+    // #include <iterator>
     // iterator_traits
-    // https://en.cppreference.com/w/cpp/iterator/iterator_traits
+    // https://www.cplusplus.com/reference/iterator/iterator_traits/
     template<class Iter>
     struct iterator_traits
     {
@@ -103,13 +107,14 @@ namespace ft
         typedef ft::random_access_iterator_tag      iterator_category;
     };
     
+    // #include <iterator>
     // std::distance
-    // https://en.cppreference.com/w/cpp/iterator/distance
-    template<class InputIt>
-    typename ft::iterator_traits<InputIt>::difference_type
-    distance (InputIt first, InputIt last)
+    // https://www.cplusplus.com/reference/iterator/distance/
+    template<class InputIterator>
+    typename ft::iterator_traits<InputIterator>::difference_type
+    distance (InputIterator first, InputIterator last)
     {
-        typename ft::iterator_traits<InputIt>::difference_type ret = 0;
+        typename ft::iterator_traits<InputIterator>::difference_type ret = 0;
         while (first != last)
         {
             first++;
@@ -118,12 +123,14 @@ namespace ft
         return ret;
     }
 
+    // #include <iterator>
     // base iterator
-    // https://en.cppreference.com/w/cpp/iterator/iterator
-    template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
+    // https://www.cplusplus.com/reference/iterator/iterator/
+
+    template<class Category, class T, class Distance = ptrdiff_t,
+             class Pointer = T*, class Reference = T&>
     struct iterator
     {
-    public:
         typedef Category    iterator_category;
         typedef T           value_type;
         typedef Distance    difference_type;
@@ -131,29 +138,12 @@ namespace ft
         typedef Reference   reference;
     };
 
-    // bidirectional_iterator
-    // 왜 상속받은 것을 또 하고 있지?
-    // 왜 private이지?
-    // 왜 다 만들다 만것 같지?
-
-    template <class T>
-    class bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>
-    {
-    public:
-        typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category iterator_category;
-        typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type        value_type;
-        typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type   difference_type;
-        typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer           pointer;
-        typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference         reference;
-    private:
-        pointer _elem;
-    };
-
+    // #include <iterator>
     // reverse_iterator
+    // https://www.cplusplus.com/reference/iterator/reverse_iterator/
     template <class Iterator>
     class reverse_iterator
     {
-
         public:
             typedef Iterator    iterator_type;
             typedef typename ft::iterator_traits<Iterator>::iterator_category   iterator_category;
@@ -343,9 +333,13 @@ namespace ft
             typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category iterator_category;
             typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type        value_type;
             typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type   difference_type;
-            typedef T*  pointer;
-            typedef T&  reference;
+            typedef typename ft::iterator<ft::random_access_iterator_tag, T>::pointer           pointer;
+            typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference         reference;
 
+        private:
+            pointer _elem;
+
+        public:
             random_access_iterator()
             :
                 _elem(u_nullptr)
@@ -443,8 +437,6 @@ namespace ft
             {
                 return (random_access_iterator<const T>(this->_elem));
             }
-        private:
-            pointer _elem;
     };
 
     template <typename T>

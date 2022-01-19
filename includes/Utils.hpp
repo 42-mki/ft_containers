@@ -5,7 +5,6 @@
 
 // nullptr
 // NULL은 문제가 있어서 C++11에서 도입되었습니다
-// https://www.amazon.com/dp/0201924889
 
 const class
 {
@@ -38,7 +37,7 @@ namespace ft
         return (os.str());
     };
     
-    // <functional>
+    // #include <functional>
     // binary_function
     // http://www.cplusplus.com/reference/functional/binary_function/
     // less를 구한하기 위한 base struct
@@ -50,7 +49,7 @@ namespace ft
         typedef Result result_type;
     };
 
-    // <functional>
+    // #include <functional>
     // less 구조체
     // https://docs.microsoft.com/ko-kr/cpp/standard-library/less-struct?view=msvc-170
     // 함수 객체 개념을 알아봅시다.
@@ -63,6 +62,7 @@ namespace ft
         }
     };
 
+    // #include <algorithm>
     // lexcicographical_compare
     // https://www.cplusplus.com/reference/algorithm/lexicographical_compare/
     // https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
@@ -90,78 +90,7 @@ namespace ft
         return (first1 == last1) && (first2 != last2);
     }
 
-    // <utility>
-    // std::pair struct
-    // https://en.cppreference.com/w/cpp/utility/pair
-    template <class T1, class T2>
-    struct pair
-    {
-        typedef T1 first_type;
-        typedef T2 second_type;
-
-        T1 first;
-        T2 second;
-
-        pair() : first(), second() {}
-        pair(T1 const& t1, T2 const& t2) : first(t1), second(t2) {}
-        pair(const pair<T1, T2>& p) : first(p.first), second(p.second) {}
-        pair& operator=(pair const& p) {
-            first = p.first;
-            second = p.second;
-            return *this;
-        }
-
-    };
-    template <class T1, class T2>
-    inline
-    bool
-    operator==(const pair<T1,T2>& x, const pair<T1,T2>& y)
-    {
-        return x.first == y.first && x.second == y.second;
-    }
-    template <class T1, class T2>
-    inline
-    bool
-    operator!=(const pair<T1,T2>& x, const pair<T1,T2>& y)
-    {
-        return !(x == y);
-    }
-    template <class T1, class T2>
-    inline
-    bool
-    operator<(const pair<T1,T2>& x, const pair<T1,T2>& y)
-    {
-        return x.first < y.first || (!(y.first < x.first) && x.second < y.second);
-    }
-    template <class T1, class T2>
-    inline
-    bool
-    operator>(const pair<T1,T2>& x, const pair<T1,T2>& y)
-    {
-        return y < x;
-    }
-    template <class T1, class T2>
-    inline
-    bool
-    operator>=(const pair<T1,T2>& x, const pair<T1,T2>& y)
-    {
-        return !(x < y);
-    }
-    template <class T1, class T2>
-    inline
-    bool
-    operator<=(const pair<T1,T2>& x, const pair<T1,T2>& y)
-    {
-        return !(y > x);
-    }
-    template <class T1, class T2>
-    inline
-    ft::pair<T1,T2>
-    make_pair(T1 x, T2 y)
-    {
-        return ft::pair<T1, T2>(x, y);
-    }
-
+    // <type_traits>
     // enable_if
     template<bool B, class T = void>
     struct enable_if {};

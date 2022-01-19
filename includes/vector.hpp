@@ -7,12 +7,9 @@
 
 namespace ft
 {
-    template <typename T, typename Alloc = std::allocator<T> >
+    template  <typename T, typename Alloc = std::allocator<T> >
     class vector
     {
-    /*
-    **  Member types
-    */
     public:
         typedef T                                                       value_type;
         typedef Alloc                                                   allocator_type;
@@ -30,10 +27,10 @@ namespace ft
     **  Private Member Variable
     */
     private:
-        allocator_type  m_alloc;
-        pointer         m_begin;
-        pointer         m_end;
-        pointer         m_end_cap;
+        allocator_type  _alloc;
+        pointer         _begin;
+        pointer         _end;
+        pointer         _end_cap;
     /*
     **  Private Member Function
     */
@@ -48,37 +45,37 @@ namespace ft
     **  orthodox canonical form
     */
     public:
-        vector  (const allocator_type& _alloc = allocator_type())
+        vector  (const allocator_type& alloc = allocator_type())
         :
-            m_alloc(_alloc),
-            m_begin(u_nullptr),
-            m_end(u_nullptr),
-            m_end_cap(u_nullptr)
+            _alloc(alloc),
+            _begin(u_nullptr),
+            _end(u_nullptr),
+            _end_cap(u_nullptr)
         {}
-        vector  (size_type _n,
+        vector  (size_type n,
                 const value_type& val = value_type(),
-                const allocator_type& _alloc = allocator_type())
+                const allocator_type& alloc = allocator_type())
         :
-            m_alloc(_alloc),
-            m_begin(u_nullptr),
-            m_end(u_nullptr),
-            m_end_cap(u_nullptr)
+            _alloc(alloc),
+            _begin(u_nullptr),
+            _end(u_nullptr),
+            _end_cap(u_nullptr)
         {
-            m_begin = m_alloc.allocate(_n);
-            m_end_cap = m_begin + _n;
-            m_end = m_begin;
-            while (_n--)
+            _begin = _alloc.allocate(n);
+            _end_cap = _begin + n;
+            _end = _begin;
+            while (n--)
             {
-                m_alloc.construct(m_end, val);
-                m_end++;
+                _alloc.construct(_end, val);
+                _end++;
             }
         }
         vector(const vector &v)
         :
-            m_alloc(v.m_alloc),
-            m_begin(u_nullptr),
-            m_end(u_nullptr),
-            m_end_cap(u_nullptr)
+            _alloc(v._alloc),
+            _begin(u_nullptr),
+            _end(u_nullptr),
+            _end_cap(u_nullptr)
         {
             this->insert(this->begin(), v.begin(), v.end());
         }
@@ -93,7 +90,7 @@ namespace ft
         ~vector()
         {
             this->clear();
-            m_alloc.deallocate(m_begin, this->capacity());
+            _alloc.deallocate(_begin, this->capacity());
         }
     /*
     **  Iterators    
@@ -101,23 +98,23 @@ namespace ft
     public:
         iterator begin()
         {
-            return (m_begin);
+            return (_begin);
         }
         const_iterator begin() const
         {
-            return (m_begin);
+            return (_begin);
         }
         iterator end()
         {
             if (this->empty())
                 return (this->begin());
-            return (m_end);
+            return (_end);
         }
         const_iterator end() const
         {
             if (this->empty())
                 return (this->begin());
-            return (m_end);
+            return (_end);
         }
         reverse_iterator rbegin()
         {
@@ -141,7 +138,7 @@ namespace ft
     public:
         size_type size(void) const
         {
-            return (this->m_end - this->m_begin);
+            return (this->_end - this->_begin);
         }
         size_type max_size(void) const
         {
@@ -155,8 +152,8 @@ namespace ft
             {
                 while (this->size() > n)
                 {
-                    --m_end;
-                    m_alloc.destroy(m_end);
+                    --_end;
+                    _alloc.destroy(_end);
                 }
             }
             else
@@ -164,12 +161,12 @@ namespace ft
         }
         size_type capacity(void) const
         {
-            return (this->m_end_cap - this->m_begin);
+            return (this->_end_cap - this->_begin);
         }
 
         bool empty() const
         {
-            return this->m_begin == this->m_end;
+            return this->_begin == this->_end;
         }
 
         void reserve(size_type n)
@@ -178,60 +175,60 @@ namespace ft
                 throw (std::length_error("vector::reserve"));
             else if (n > this->capacity())
             {
-                pointer temp_begin = m_begin;
-                pointer temp_end = m_end;
+                pointer temp_begin = _begin;
+                pointer temp_end = _end;
                 size_type temp_size = this->size();
                 size_type temp_capacity = this->capacity();
 
-                m_begin = m_alloc.allocate(n);
-                m_end_cap = m_begin + n;
-                m_end = m_begin;
+                _begin = _alloc.allocate(n);
+                _end_cap = _begin + n;
+                _end = _begin;
                 while (temp_begin != temp_end)
                 {
-                    m_alloc.construct(m_end, *temp_begin);
-                    m_end++;
+                    _alloc.construct(_end, *temp_begin);
+                    _end++;
                     temp_begin++;
                 }
-                m_alloc.deallocate(temp_begin - temp_size, temp_capacity);
+                _alloc.deallocate(temp_begin - temp_size, temp_capacity);
             }
         }
     /*
     **  Element access:
     */
     public:
-        reference operator[] (size_type _n)
+        reference operator[] (size_type n)
         {
-            return this->m_begin[_n];
+            return this->_begin[n];
         }
-        const_reference operator[] (size_type _n) const
+        const_reference operator[] (size_type n) const
         {
-            return this->m_begin[_n];
+            return this->_begin[n];
         }
-        reference at (size_type _n)
+        reference at (size_type n)
         {
-            checkRange(_n);
-            return this->m_begin[_n];
+            checkRange(n);
+            return this->_begin[n];
         }
-        const_reference at (size_type _n) const
+        const_reference at (size_type n) const
         {
-            checkRange(_n);
-            return this->m_begin[_n];
+            checkRange(n);
+            return this->_begin[n];
         }
         reference front()
         {
-            return *this->m_begin;
+            return *this->_begin;
         }
         const reference front() const
         {
-            return *this->m_begin;
+            return *this->_begin;
         }
         reference back()
         {
-            return *(this->m_end - 1);
+            return *(this->_end - 1);
         }
         const reference back() const
         {
-            return *(this->m_end - 1);
+            return *(this->_end - 1);
         }
     /*
     **  Modifiers:
@@ -246,32 +243,32 @@ namespace ft
             // assign은 기존 elements를 초기화한다.
             this->clear();
             size_type dist = ft::distance(first, last);
-            if (m_end_cap - m_begin >= dist)
+            if (_end_cap - _begin >= dist)
             {
                 while (&(*first) != &(*last))
                 {
-                    m_alloc.construct(m_end, *first);
+                    _alloc.construct(_end, *first);
                     first++;
                     last++;
                 }
             }
             else
             {
-                pointer temp_begin = m_alloc.allocate(dist);
+                pointer temp_begin = _alloc.allocate(dist);
                 pointer temp_end = temp_begin;
                 pointer temp_end_cap = temp_begin + dist;
 
                 while (&(*first) != &(*last))
                 {
-                    m_alloc.construct(m_end, *first);
+                    _alloc.construct(_end, *first);
                     first++;
                     last++;
                 }
 
-                m_alloc.deallocate(m_begin, this->capacity());
-                m_begin = temp_begin;
-                m_end = temp_end;
-                m_end_cap = temp_end_cap;
+                _alloc.deallocate(_begin, this->capacity());
+                _begin = temp_begin;
+                _end = temp_end;
+                _end_cap = temp_end_cap;
             }
         }
 
@@ -280,77 +277,77 @@ namespace ft
             this->clear();
             if (n == 0)
                 return ;
-            if (size_type(m_end_cap - m_begin) >= n)
+            if (size_type(_end_cap - _begin) >= n)
             {
                 while (n)
                 {
-                    m_alloc.construct(m_end++, val);
+                    _alloc.construct(_end++, val);
                     n--;
                 }
             }
             else
             {
-                m_alloc.deallocate(m_begin, this->capacity());
-                m_begin = m_alloc.allocate(n);
-                m_end = m_begin;
-                m_end_cap = m_begin + n;
+                _alloc.deallocate(_begin, this->capacity());
+                _begin = _alloc.allocate(n);
+                _end = _begin;
+                _end_cap = _begin + n;
                 while (n)
                 {
-                    m_alloc.construct(m_end++, val);
+                    _alloc.construct(_end++, val);
                     n--;
                 }
             }
         }
         void push_back(const value_type& val)
         {
-            if (m_end == m_end_cap)
+            if (_end == _end_cap)
             {
                 int next_capacity = (this->size() > 0) ? (int)(this->capacity() * 2) : 1;
                 this->reserve(next_capacity);
             }
-            m_alloc.construct(m_end, val);
-            m_end++;
+            _alloc.construct(_end, val);
+            _end++;
         }
         void pop_back()
         {
-            m_alloc.destroy(&this->back());
-            m_end--;
+            _alloc.destroy(&this->back());
+            _end--;
         }
 
         // insert()
         iterator insert (iterator position, const value_type& val)
         {
-            size_type pos_len = &(*position) - m_begin;
+            size_type pos_len = &(*position) - _begin;
             // vector가 꽉 차있지 않다면
-            if (size_type(m_end_cap - m_end) >= 1)
+            if (size_type(_end_cap - _end) >= 1)
             {
                 for (size_type i = 0; i < pos_len; i++)
-                    m_alloc.construct(m_end - i, *(m_end - i - 1));
-                m_end++;
-                m_alloc.construct(&(*position), val);
+                    _alloc.construct(_end - i, *(_end - i - 1));
+                _end++;
+                _alloc.construct(&(*position), val);
             }
             else
             {
                 int next_cap = (this->capacity() * 2 > 0) ? this->capacity() * 2 : 1;
-                pointer temp_begin = m_alloc.allocate(next_cap);
+                pointer temp_begin = _alloc.allocate(next_cap);
                 pointer temp_end = temp_begin + this->size() + 1;
                 pointer temp_end_cap = temp_begin + next_cap;
 
                 for (size_type i = 0; i < pos_len; i++)
-                    m_alloc.construct(temp_begin + i, *(m_begin + i));
-                m_alloc.construct(temp_begin + pos_len, val);
+                    _alloc.construct(temp_begin + i, *(_begin + i));
+                _alloc.construct(temp_begin + pos_len, val);
                 for (size_type j = 0; j < this->size() - pos_len; j++)
-                    m_alloc.construct(temp_end - j - 1, *(m_end - j - 1));
+                    _alloc.construct(temp_end - j - 1, *(_end - j - 1));
                 
                 for (size_type l = 0; l < this->size(); l++)
-                    m_alloc.destroy(m_begin + l);
-                if (m_begin)
-                    m_alloc.deallocate(m_begin, this->capacity());
-                m_begin = temp_begin;
-                m_end = temp_end;
-                m_end_cap = temp_end_cap;
+                    _alloc.destroy(_begin + l);
+                if (_begin)
+                    _alloc.deallocate(_begin, this->capacity());
+                _begin = temp_begin;
+                _end = temp_end;
+                _end_cap = temp_end_cap;
             }
-            return (iterator(m_begin + pos_len));
+            return (iterator(_begin + pos_len));
         }
 
         void insert (iterator position, size_type n, const value_type& val)
@@ -359,16 +356,16 @@ namespace ft
                 return ;
             if (n > this->max_size())
                 throw (std::length_error("vector::insert (fill)"));
-            size_type pos_len = &(*position) - m_begin;
+            size_type pos_len = &(*position) - _begin;
             // insert할 val의 갯수 n이 vector의 빈 공간보다 적다면, 즉 충분하다면
-            if (size_type(m_end_cap - m_end) >= n)
+            if (size_type(_end_cap - _end) >= n)
             {
                 for (size_type i = 0; i < this->size() - pos_len; i++)
-                    m_alloc.construct(m_end - i + (n - 1), *(m_end - i - 1));
-                m_end += n;
+                    _alloc.construct(_end - i + (n - 1), *(_end - i - 1));
+                _end += n;
                 while (n)
                 {
-                    m_alloc.construct(&(*position) + (n - 1), val);
+                    _alloc.construct(&(*position) + (n - 1), val);
                     n--;
                 }
             }
@@ -377,7 +374,7 @@ namespace ft
             {
                 // 현재 vector capacity를 두배로 늘린다.
                 int next_cap = (this->capacity() > 0) ? (int)(this->capacity() * 2) : 1;
-                pointer temp_begin = m_alloc.allocate(next_cap);
+                pointer temp_begin = _alloc.allocate(next_cap);
                 pointer temp_end_cap = temp_begin + next_cap;
                 pointer temp_end;
                 // 그래도 n이 너무 커서 두배로 capacity를 늘려도 부족하다면
@@ -385,31 +382,31 @@ namespace ft
                 {
                     // 할당된 공간을 해제하고 새로 할당
                     if (temp_begin)
-                        m_alloc.deallocate(temp_begin, temp_end_cap - temp_begin);
+                        _alloc.deallocate(temp_begin, temp_end_cap - temp_begin);
                     next_cap = this->size() + n;
-                    temp_begin = m_alloc.allocate(next_cap);
+                    temp_begin = _alloc.allocate(next_cap);
                     temp_end = temp_begin + this->size() + n;
                     temp_end_cap = temp_begin + next_cap;
                 }
                 temp_end = temp_begin + this->size() + n;
 
                 // 새로 insert할 iter 전까지 기존 elements 복사
-                for (int i = 0; i < (&(*position) - m_begin); i++)
-                    m_alloc.construct(temp_begin + i, *(m_begin + i));
+                for (int i = 0; i < (&(*position) - _begin); i++)
+                    _alloc.construct(temp_begin + i, *(_begin + i));
                 // 새로운 elements 추가
                 for (size_type k = 0; k < n; k++)
-                    m_alloc.construct(temp_begin + pos_len + k, val);
+                    _alloc.construct(temp_begin + pos_len + k, val);
                 // 이후 남은 vector element 복사
                 for (size_type j = 0; j < (this->size() - pos_len); j++)
-                    m_alloc.construct(temp_end - j - 1, *(m_end - j - 1));
+                    _alloc.construct(temp_end - j - 1, *(_end - j - 1));
                 // 기존 vector destroy
                 for (size_type u = 0; u < this->size(); u++)
-                    m_alloc.destroy(m_begin + u);
-                m_alloc.deallocate(m_begin, this->capacity());
+                    _alloc.destroy(_begin + u);
+                _alloc.deallocate(_begin, this->capacity());
 
-                m_begin = temp_begin;
-                m_end = temp_end;
-                m_end_cap = temp_end_cap;
+                _begin = temp_begin;
+                _end = temp_end;
+                _end_cap = temp_end_cap;
             }
         }
 
@@ -421,18 +418,18 @@ namespace ft
             if (!ft::is_ft_iterator_tagged<typename ft::iterator_traits<InputIterator>::iterator_category>::value)
                 throw (ft::invalid_iterator_exception<void>());
             size_type dist = ft::distance(first, last);
-            size_type pos_len = &(*position) - m_begin;
+            size_type pos_len = &(*position) - _begin;
             // vector의 남은 공간이 넉넉하다면
-            if (size_type(m_end_cap - m_end) >= dist)
+            if (size_type(_end_cap - _end) >= dist)
             {
                 // insert할 position 이후 element들을 dist만큼 뒤로 미루기
                 for (size_type i = 0; i < this->size() - pos_len; i++)
-                    m_alloc.construct(m_end - i + (dist - 1), *(m_end - i - 1));
-                m_end += dist;
+                    _alloc.construct(_end - i + (dist - 1), *(_end - i - 1));
+                _end += dist;
                 // 그리고 그 사이에 새로운 element채우기
                 while (&(*first) != &(*last))
                 {
-                    m_alloc.construct(&(*position), *first);
+                    _alloc.construct(&(*position), *first);
                     position++;
                     first++;
                 }
@@ -440,7 +437,7 @@ namespace ft
             // 넉넉하지 않다면
             else
             {
-                pointer temp_begin = m_alloc.allocate(this->capacity() * 2);
+                pointer temp_begin = _alloc.allocate(this->capacity() * 2);
                 pointer temp_end = temp_begin + this->size() + dist;
                 pointer temp_end_cap = temp_begin + (this->capacity() * 2);
                 // 그래도 n이 너무 커서 두배로 capacity를 늘려도 부족하다면
@@ -448,48 +445,48 @@ namespace ft
                 {
                     // 할당된 공간을 해제하고 새로 할당
                     if (temp_begin)
-                        m_alloc.deallocate(temp_begin, temp_end_cap - temp_begin);
-                    temp_begin = m_alloc.allocate(this->size() + dist);
+                        _alloc.deallocate(temp_begin, temp_end_cap - temp_begin);
+                    temp_begin = _alloc.allocate(this->size() + dist);
                     temp_end = temp_begin + this->size() + dist;
                     temp_end_cap = temp_end;
                 }
 
                 // 새로 insert할 iter 전까지 기존 elements 복사
                 for (size_type i = 0; i < pos_len; i++)
-                    m_alloc.construct(temp_begin + i, *(m_begin + i));
+                    _alloc.construct(temp_begin + i, *(_begin + i));
                 // 새로운 elements 추가
                 for (int j = 0; &(*first) != &(*last); first++, j++)
-                    m_alloc.construct(temp_begin + pos_len + j, *first);
+                    _alloc.construct(temp_begin + pos_len + j, *first);
                 // 이후 남은 vector element 복사
                 for (size_type k = 0; k < this->size() - pos_len; k++)
-                    m_alloc.construct(temp_begin + pos_len + dist + k, *(m_begin + pos_len + k));
+                    _alloc.construct(temp_begin + pos_len + dist + k, *(_begin + pos_len + k));
                 
                 // 기존 vector destroy
                 for (size_type u = 0; u < this->size(); u++)
-                    m_alloc.destroy(m_begin + u);
-                m_alloc.deallocate(m_begin, this->capacity());
+                    _alloc.destroy(_begin + u);
+                _alloc.deallocate(_begin, this->capacity());
 
-                m_begin = temp_begin;
-                m_end = temp_end;
-                m_end_cap = temp_end_cap;
+                _begin = temp_begin;
+                _end = temp_end;
+                _end_cap = temp_end_cap;
             }
         }
 
         iterator erase(iterator position)
         {
             pointer p_pos = &(*position);
-            m_alloc.destroy(&(*position));
-            if (&(*position) + 1 == m_end)
-                m_alloc.destroy(&(*position));
+            _alloc.destroy(&(*position));
+            if (&(*position) + 1 == _end)
+                _alloc.destroy(&(*position));
             else
             {
-                for (int i = 0; i < m_end - &(*position) - 1; i++)
+                for (int i = 0; i < _end - &(*position) - 1; i++)
                 {
-                    m_alloc.construct(&(*position) + i, *(&(*position) + i + 1));
-                    m_alloc.destroy(&(*position) + i + 1);
+                    _alloc.construct(&(*position) + i, *(&(*position) + i + 1));
+                    _alloc.destroy(&(*position) + i + 1);
                 }
             }
-            m_end -= 1;
+            _end -= 1;
             return (iterator(p_pos));
         }
 
@@ -497,32 +494,32 @@ namespace ft
         {
             pointer p_first = &(*first);
             for (; &(*first) != &(*last); first++)
-                m_alloc.destroy(&(*first));
-            for (int i = 0; i < m_end - &(*last); i++)
+                _alloc.destroy(&(*first));
+            for (int i = 0; i < _end - &(*last); i++)
             {
-                m_alloc.construct(p_first + i, *(&(*last)) + i);
-                m_alloc.destroy(&(*last));
+                _alloc.construct(p_first + i, *(&(*last)) + i);
+                _alloc.destroy(&(*last));
             }
-            m_end -= (&(*last) - p_first);
+            _end -= (&(*last) - p_first);
             return (iterator(p_first));
         }
 
         void swap(vector &x)
         {
-            pointer temp_begin = x.m_begin;
-            pointer temp_end = x.m_end;
-            pointer temp_endcap = x.m_end_cap;
-            allocator_type temp_alloc = x.m_alloc;
+            pointer temp_begin = x._begin;
+            pointer temp_end = x._end;
+            pointer temp_endcap = x._end_cap;
+            allocator_type temp_alloc = x._alloc;
 
-            x.m_begin = this->m_begin;
-            x.m_end = this->m_end;
-            x.m_end_cap = this->m_end_cap;
-            x.m_alloc = this->m_alloc;
+            x._begin = this->_begin;
+            x._end = this->_end;
+            x._end_cap = this->_end_cap;
+            x._alloc = this->_alloc;
 
-            this->m_begin = temp_begin;
-            this->m_end = temp_end;
-            this->m_end_cap = temp_endcap;
-            this->m_alloc = temp_alloc;
+            this->_begin = temp_begin;
+            this->_end = temp_end;
+            this->_end_cap = temp_endcap;
+            this->_alloc = temp_alloc;
         }
         
         void clear()
@@ -530,8 +527,8 @@ namespace ft
             size_type tempsize = this->size();
             for (size_type i = 0; i < tempsize; i++)
             {
-                m_end--;
-                m_alloc.destroy(m_end);
+                _end--;
+                _alloc.destroy(_end);
             }
         }
     /*
@@ -540,7 +537,7 @@ namespace ft
     public:
         allocator_type get_allocator(void)
         {
-            return m_alloc;
+            return _alloc;
         }
     };
     /*

@@ -8,7 +8,7 @@
 
 #include "Vector.hpp"
 #include "Stack.hpp"
-// #include "Map.hpp"
+#include "Map.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -695,28 +695,270 @@ void    test_mutant_stack_char(void)
     }
 }
 
-// void    test_map_int_int()
-// {
-//     std::map<int, int> map_int;
+template <typename Key, typename T>
+void    display_std_map(std::map<Key, T> &std_map)
+{
+    std::cout << "display_std_map\n";
+    for (typename std::map<Key, T>::iterator it = std_map.begin(); it != std_map.end(); ++it)
+        std::cout << "key: " << (*it).first << " value: " << (*it).second << "\n";
+    std::cout << "\n";
+}
+
+template <typename Key, typename T>
+void    display_std_map_rev(std::map<Key, T> &std_map)
+{
+    std::cout << "display_std_map_rev\n";
+    for (typename std::map<Key, T>::reverse_iterator it = std_map.rbegin(); it != std_map.rend(); ++it)
+        std::cout << "key: " << (*it).first << " value: " << (*it).second << "\n";
+    std::cout << "\n";
+}
+
+template <typename Key, typename T>
+void    display_ft_map(ft::map<Key, T> &ft_map)
+{
+    std::cout << "display_ft_map\n";
+    for (typename ft::map<Key, T>::iterator it = ft_map.begin(); it != ft_map.end(); ++it)
+        std::cout << "key: " << (*it).first << " value: " << (*it).second << "\n";
+    std::cout << "\n";
+}
+
+template <typename Key, typename T>
+void    display_ft_map_rev(ft::map<Key, T> &ft_map)
+{
+    std::cout << "display_ft_map_rev\n";
+    for (typename ft::map<Key, T>::reverse_iterator it = ft_map.rbegin(); it != ft_map.rend(); ++it)
+        std::cout << "key: " << (*it).first << " value: " << (*it).second << "\n";
+    std::cout << "\n";
+}
+
+void    test_map()
+{
+    {
+        std::cout << "\n------map<int> 생성-------\n";
+        std::map<int, std::string> std_map;
+        ft::map<int, std::string> ft_map;
+        std::cout << "-----------------------------\n";
+        std::cout << "--------Capacity-------------\n";
+        std::cout << "-----------------------------\n";
+        std::cout << "\n------map.empty()-------\n";
+        std::cout << "std_map.empty(): " << std_map.empty() << "\n";
+        std::cout << "ft_map.empty():  " << ft_map.empty() << "\n";
+        std::cout << "\n------map.size()-------\n";
+        std::cout << "std_map.size(): " << std_map.size() << "\n";
+        std::cout << "ft_map.size():  " << ft_map.size() << "\n";
+        std::cout << "\n------map.insert(std::make_pair())-------\n";
+        std::cout << "std_map.insert(std::make_pair()): " << (*std_map.insert(std::make_pair(1, "apple")).first).second << "\n";
+        std::cout << "ft_map.insert(std::make_pair()):  " << (*ft_map.insert(ft::make_pair(1, "apple")).first).second << "\n";
+        std::cout << "\n------map.empty()-------\n";
+        std::cout << "std_map.empty(): " << std_map.empty() << "\n";
+        std::cout << "ft_map.empty():  " << ft_map.empty() << "\n";
+        std::cout << "\n------map.size()-------\n";
+        std::cout << "std_map.size(): " << std_map.size() << "\n";
+        std::cout << "ft_map.size():  " << ft_map.size() << "\n";
+    }
+    {
+        std::map<int, std::string> std_map;
+        ft::map<int, std::string> ft_map;
+        std_map.insert(std::make_pair(1, "a"));
+        std_map.insert(std::make_pair(2, "b"));
+        std_map.insert(std::make_pair(11, "c"));
+        std_map.insert(std::make_pair(12, "d"));
+        std_map.insert(std::make_pair(21, "e"));
+        std_map.insert(std::make_pair(22, "f"));
+        ft_map.insert(ft::make_pair(1, "a"));
+        ft_map.insert(ft::make_pair(2, "b"));
+        ft_map.insert(ft::make_pair(11, "c"));
+        ft_map.insert(ft::make_pair(12, "d"));
+        ft_map.insert(ft::make_pair(21, "e"));
+        ft_map.insert(ft::make_pair(22, "f"));
+        std::cout << "-----------------------------\n";
+        std::cout << "--------Operations-------------\n";
+        std::cout << "-----------------------------\n";
+        display_std_map(std_map);
+        display_std_map_rev(std_map);
+        display_ft_map(ft_map);
+        display_ft_map_rev(ft_map);
+        std::cout << "\n------map.count(1)-------\n";
+        std::cout << "std_map.count(1): " << std_map.count(1) << "\n";
+        std::cout << "ft_map.count(1):  " << ft_map.count(1) << "\n";
+        std::cout << "\n------map.count(2)-------\n";
+        std::cout << "std_map.count(2): " << std_map.count(2) << "\n";
+        std::cout << "ft_map.count(2):  " << ft_map.count(2) << "\n";
+        std::cout << "\n------map.find(1)-------\n";
+        std::cout << "std_map.find(1)->second: " << std_map.find(1)->second << "\n";
+        std::cout << "ft_map.find(1)->second:  " << ft_map.find(1)->second << "\n";
+        std::cout << "\n------map.lower_bound-------\n";
+        std::cout << "std_map.lower_bound(1)->second: " << std_map.lower_bound(1)->second << "\n";
+        std::cout << "std_map.lower_bound(2)->second: " << std_map.lower_bound(2)->second << "\n";
+        std::cout << "std_map.lower_bound(3)->second: " << std_map.lower_bound(3)->second << "\n";
+        std::cout << "ft_map.lower_bound(1)->second: " << ft_map.lower_bound(1)->second << "\n";
+        std::cout << "ft_map.lower_bound(2)->second: " << ft_map.lower_bound(2)->second << "\n";
+        std::cout << "ft_map.lower_bound(3)->second: " << ft_map.lower_bound(3)->second << "\n";
+        std::cout << "\n------map.upper_bound-------\n";
+        std::cout << "std_map.upper_bound(1)->second: " << std_map.upper_bound(1)->second << "\n";
+        std::cout << "std_map.upper_bound(2)->second: " << std_map.upper_bound(2)->second << "\n";
+        std::cout << "std_map.upper_bound(3)->second: " << std_map.upper_bound(3)->second << "\n";
+        std::cout << "ft_map.upper_bound(1)->second: " << ft_map.upper_bound(1)->second << "\n";
+        std::cout << "ft_map.upper_bound(2)->second: " << ft_map.upper_bound(2)->second << "\n";
+        std::cout << "ft_map.upper_bound(3)->second: " << ft_map.upper_bound(3)->second << "\n";
+        std::cout << "\n------map.equal_range-------\n";
+        std::cout << "std_map.equal_range(1)->second: " << std_map.equal_range(1).second->second << "\n";
+        std::cout << "std_map.equal_range(2)->second: " << std_map.equal_range(2).second->second << "\n";
+        std::cout << "std_map.equal_range(3)->second: " << std_map.equal_range(3).second->second << "\n";
+        std::cout << "ft_map.equal_range(1)->second: " << ft_map.equal_range(1).second->second << "\n";
+        std::cout << "ft_map.equal_range(2)->second: " << ft_map.equal_range(2).second->second << "\n";
+        std::cout << "ft_map.equal_range(3)->second: " << ft_map.equal_range(3).second->second << "\n";
+    }
+    {
+        std::map<int, std::string> std_map;
+        ft::map<int, std::string> ft_map;
+        std_map.insert(std::make_pair(1, "a"));
+        std_map.insert(std::make_pair(2, "b"));
+        std_map.insert(std::make_pair(11, "c"));
+        std_map.insert(std::make_pair(12, "d"));
+        std_map.insert(std::make_pair(21, "e"));
+        std_map.insert(std::make_pair(22, "f"));
+        ft_map.insert(ft::make_pair(1, "a"));
+        ft_map.insert(ft::make_pair(2, "b"));
+        ft_map.insert(ft::make_pair(11, "c"));
+        ft_map.insert(ft::make_pair(12, "d"));
+        ft_map.insert(ft::make_pair(21, "e"));
+        ft_map.insert(ft::make_pair(22, "f"));
+        std::cout << "-----------------------------\n";
+        std::cout << "--------Operations-------------\n";
+        std::cout << "-----------------------------\n";
+        
+    }
+    {
+        std::map<char,int> mymap;
+
+        std::map<char,int>::key_compare mycomp = mymap.key_comp();
+
+        mymap['a']=100;
+        mymap['b']=200;
+        mymap['c']=300;
+
+        std::cout << "mymap contains:\n";
+
+        char highest = mymap.rbegin()->first;     // key value of last element
+
+        std::map<char,int>::iterator it = mymap.begin();
+        do {
+            std::cout << it->first << " => " << it->second << '\n';
+        } while ( mycomp((*it++).first, highest) );
+
+        std::cout << '\n';
+    }
+    {
+        ft::map<char,int> mymap;
+
+        ft::map<char,int>::key_compare mycomp = mymap.key_comp();
+
+        mymap['a']=100;
+        mymap['b']=200;
+        mymap['c']=300;
+
+        std::cout << "mymap contains:\n";
+
+        char highest = mymap.rbegin()->first;     // key value of last element
+
+        ft::map<char,int>::iterator it = mymap.begin();
+        do {
+            std::cout << it->first << " => " << it->second << '\n';
+        } while ( mycomp((*it++).first, highest) );
+
+        std::cout << '\n';
+    }
+    {
+        std::map<char,int> mymap;
+
+        // first insert function version (single parameter):
+        mymap.insert ( std::pair<char,int>('a',100) );
+        mymap.insert ( std::pair<char,int>('z',200) );
+
+        std::pair<std::map<char,int>::iterator,bool> ret;
+        ret = mymap.insert ( std::pair<char,int>('z',500) );
+        if (ret.second==false) {
+        std::cout << "element 'z' already existed";
+        std::cout << " with a value of " << ret.first->second << '\n';
+        }
+
+        // second insert function version (with hint position):
+        std::map<char,int>::iterator it = mymap.begin();
+        mymap.insert (it, std::pair<char,int>('b',300));  // max efficiency inserting
+        mymap.insert (it, std::pair<char,int>('c',400));  // no max efficiency inserting
+
+        // third insert function version (range insertion):
+        std::map<char,int> anothermap;
+        anothermap.insert(mymap.begin(),mymap.find('c'));
+
+        // showing contents:
+        std::cout << "mymap contains:\n";
+        for (it=mymap.begin(); it!=mymap.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
+
+        std::cout << "anothermap contains:\n";
+        for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
+    }
+    {
+        ft::map<char,int> mymap;
+
+        // first insert function version (single parameter):
+        mymap.insert ( ft::pair<char,int>('a',100) );
+        mymap.insert ( ft::pair<char,int>('z',200) );
+
+        ft::pair<ft::map<char,int>::iterator,bool> ret;
+        ret = mymap.insert ( ft::pair<char,int>('z',500) );
+        if (ret.second==false) {
+        std::cout << "element 'z' already existed";
+        std::cout << " with a value of " << ret.first->second << '\n';
+        }
+
+        // second insert function version (with hint position):
+        ft::map<char,int>::iterator it = mymap.begin();
+        mymap.insert (it, ft::pair<char,int>('b',300));  // max efficiency inserting
+        mymap.insert (it, ft::pair<char,int>('c',400));  // no max efficiency inserting
+
+        // third insert function version (range insertion):
+        ft::map<char,int> anothermap;
+        anothermap.insert(mymap.begin(),mymap.find('c'));
+
+        // showing contents:
+        std::cout << "mymap contains:\n";
+        for (it=mymap.begin(); it!=mymap.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
+
+        std::cout << "anothermap contains:\n";
+        for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
+
+        ft::map<char,int> mymap_2(mymap.begin(), mymap.end());
+    }
+}
+
+void    test_map_int_int()
+{
+    std::map<int, int> map_int;
 
 	
-// 	for (int i = 0; i < COUNT; ++i)
-// 	{
-// 		map_int.insert(std::make_pair(rand(), rand()));
-// 	}
+	for (int i = 0; i < COUNT; ++i)
+	{
+		map_int.insert(std::make_pair(rand(), rand()));
+	}
 
-// 	int sum = 0;
-// 	for (int i = 0; i < 10000; i++)
-// 	{
-// 		int access = rand();
-// 		sum += map_int[access];
-// 	}
-// 	std::cout << "should    be constant with the same seed: " << sum << std::endl;
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should    be constant with the same seed: " << sum << std::endl;
 
-// 	{
-// 		std::map<int, int> copy = map_int;
-// 	}
-// }
+	{
+		std::map<int, int> copy = map_int;
+	}
+}
 
 int main(int argc, char** argv) {
 	if (argc != 2)
@@ -735,7 +977,7 @@ int main(int argc, char** argv) {
 **  vector test 
 */
     test_vector();
-    // test_vector_Buffer();
+    test_vector_Buffer();
 /*
 **  stack test 
 */
@@ -745,7 +987,8 @@ int main(int argc, char** argv) {
 /*
 **  map test 
 */
-    // test_map_int_int();
+    test_map();
+    test_map_int_int();
 
 	return (0);
 }
