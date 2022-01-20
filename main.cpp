@@ -5,6 +5,7 @@
 #include <map>
 #include <stack>
 #include <vector>
+#include <list>
 
 #include "Vector.hpp"
 #include "Stack.hpp"
@@ -13,6 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cmath>
+#include <chrono>
 
 /*
 **  최대 RAM 크기는 2^32 즉 4기가 바이트
@@ -26,7 +28,7 @@ struct Buffer
 	char buff[BUFFER_SIZE];
 };
 
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+#define COUNT 1000
 
 /*
 **  std::stack은 iterator가 없지만, main.cpp에서 제공하는 MutantStack은 iterator를 만들었다.
@@ -79,6 +81,7 @@ void    display_std_vector(std::vector<T> &v)
 {
     typename std::vector<T>::iterator it;
     
+    std::cout << "std::vector->";
     for (it = v.begin(); it < v.end(); it++)
     {
         std::cout << " " << *it;
@@ -91,6 +94,7 @@ void    display_ft_vector(ft::vector<T> &v)
 {
     typename ft::vector<T>::iterator it;
     
+    std::cout << " ft::vector->";
     for (it = v.begin(); it < v.end(); it++)
     {
         std::cout << " " << *it;
@@ -103,6 +107,7 @@ void    display_std_vector_rev(std::vector<T> &v)
 {
     typename std::vector<T>::reverse_iterator it;
     
+    std::cout << "std::vector::rev->";
     for (it = v.rbegin(); it < v.rend(); it++)
     {
         std::cout << " " << *it;
@@ -115,6 +120,7 @@ void    display_ft_vector_rev(ft::vector<T> &v)
 {
     typename ft::vector<T>::reverse_iterator it;
     
+    std::cout << " ft::vector::rev->";
     for (it = v.rbegin(); it < v.rend(); it++)
     {
         std::cout << " " << *it;
@@ -127,14 +133,14 @@ void    test_pair(void)
     ft::pair<int, int> p(1, 2);
 }
 
-void    test_vector(void)
+void    test_vector_member_function_diff(void)
 {
     {
-        std::cout << "--------------------------\n";
-        std::cout << "--------Constructor-------\n";
-        std::cout << "--------------------------\n";
+        std::cout << "------------------------------------------\n";
+        std::cout << "----------------Vector Test---------------\n";
+        std::cout << "------------------------------------------\n";
         // int벡터 생성
-        std::cout << "\n-------빈 vector 생성-------\n";
+        std::cout << "\n-------------Create Empty Array-----------\n";
         std::vector<int> std_vector;
         ft::vector<int> ft_vector;
         display_std_vector<int>(std_vector);
@@ -143,7 +149,7 @@ void    test_vector(void)
     {
         // int벡터 생성하고, 크기를 4만큼 할당되었습니다.
         // 할당된 공간은 0으로 초기화됩니다.
-        std::cout << "\n-------vector(4) 생성-------\n";
+        std::cout << "\n---------------vector(4)-----------------\n";
         std::vector<int> std_vector(4);
         ft::vector<int> ft_vector(4);
         display_std_vector<int>(std_vector);
@@ -152,30 +158,31 @@ void    test_vector(void)
     {
         // int벡터 생성하고, 크기를 4만큼 할당되었습니다.
         // 할당된 공간은 2으로 초기화됩니다.
-        std::cout << "\n-------vector(4, 1) 생성-------\n";
+        std::cout << "\n-------------vector(4, 1)----------------\n";
         std::vector<int> std_vector(4, 1);
         ft::vector<int> ft_vector(4, 1);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
     }
     {
-        std::cout << "\n-------복사 생성자-------\n";
+        std::cout << "\n-------------Copy Constructor------------";
+        std::cout << "\n-------------vector(4, 1)----------------\n";
         ft::vector<int> ft_vector(4, 1);
         ft::vector<int> ft_vector_copy(ft_vector);
         display_ft_vector<int>(ft_vector);
         display_ft_vector<int>(ft_vector_copy);
     }
     {
-        std::cout << "\n-------대입 연산자 오버로딩-------\n";
+        std::cout << "\n--------------operator=()----------------\n";
         ft::vector<int> ft_vector(4, 1);
         ft::vector<int> ft_vector_copy = ft_vector;
         display_ft_vector<int>(ft_vector);
         display_ft_vector<int>(ft_vector_copy);
     }
     {
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Iterators-------\n";
-        std::cout << "-----------------------------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "-------------------Iterators-------------\n";
+        std::cout << "-----------------------------------------\n";
         std::vector<int> std_vector;
         ft::vector<int> ft_vector;
         std_vector.push_back(1);
@@ -190,12 +197,17 @@ void    test_vector(void)
         display_std_vector_rev(std_vector);
         display_ft_vector(ft_vector);
         display_ft_vector_rev(ft_vector);
+
+        // std::vector<int>::const_iterator std_const_it = std_vector.begin();
+        // *std_const_it = 5;
+        // ft::vector<int>::const_iterator ft_const_it = ft_vector.begin();
+        // *ft_const_it = 5;
     }
     {
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Capacity-------------\n";
-        std::cout << "-----------------------------\n";
-        std::cout << "\n-------1 2 3 4 생성-------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "----------------Capacity-----------------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "\n-----------------1 2 3 4-----------------\n";
         std::vector<int> std_vector;
         ft::vector<int> ft_vector;
         std_vector.push_back(1);
@@ -209,39 +221,41 @@ void    test_vector(void)
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
 
-        std::cout << "\n-------size()------\n";
+        std::cout << "\n-----------------size()------------------\n";
         std::cout << "std_vector.size(): " << std_vector.size() << "\n";
         std::cout << "ft_vector.size(): " << ft_vector.size() << "\n";
 
-        std::cout << "\n-------max_size()------\n";
+        std::cout << "\n-----------------max_size()--------------\n";
         std::cout << "std_vector.max_size(): " << std_vector.max_size() << "\n";
         std::cout << "ft_vector.max_size(): " << ft_vector.max_size() << "\n";
 
-        std::cout << "\n-------resize(3)------\n";
+        std::cout << "\n-----------------resize(3)---------------\n";
         std_vector.resize(3);
         ft_vector.resize(3);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
-
-        std::cout << "\n-------capacity()------\n";
+        std::cout << "std_vector.size(): " << std_vector.size() << "\n";
+        std::cout << "ft_vector.size(): " << ft_vector.size() << "\n";
         std::cout << "std_vector.capacity(): " << std_vector.capacity() << "\n";
         std::cout << "ft_vector.capacity(): " << ft_vector.capacity() << "\n";
 
-        std::cout << "\n-------empty()------\n";
+        std::cout << "\n-----------------empty()-----------------\n";
         std::cout << "std_vector.empty(): " << std_vector.empty() << "\n";
         std::cout << "ft_vector.empty(): " << ft_vector.empty() << "\n";
 
-        std::cout << "\n-------reserve(8)------\n";
+        std::cout << "\n-----------------reserve(8)--------------\n";
         std_vector.reserve(8);
         ft_vector.reserve(8);
+        std::cout << "std_vector.size(): " << std_vector.size() << "\n";
+        std::cout << "ft_vector.size(): " << ft_vector.size() << "\n";
         std::cout << "std_vector.capacity(): " << std_vector.capacity() << "\n";
         std::cout << "ft_vector.capacity(): " << ft_vector.capacity() << "\n";
     }
     {
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Element access-------\n";
-        std::cout << "-----------------------------\n";
-        std::cout << "\n-------1 2 3 4 생성-------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "--------------Element access-------------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "\n-----------------1 2 3 4-----------------\n";
         std::vector<int> std_vector;
         ft::vector<int> ft_vector;
         std_vector.push_back(1);
@@ -254,70 +268,70 @@ void    test_vector(void)
         ft_vector.push_back(4);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
-        std::cout << "\n-------operator[1]------\n";
+        std::cout << "\n---------------operator[1]---------------\n";
         std::cout << "std_vector[1]: " << std_vector[1] << "\n";
         std::cout << "ft_vector[1]: " << ft_vector[1] << "\n";
-        std::cout << "\n-------at(2)------\n";
+        std::cout << "\n---------------at(2)---------------------\n";
         std::cout << "std_vector.at(2): " << std_vector.at(2) << "\n";
         std::cout << "ft_vector.at(2): " << ft_vector.at(2) << "\n";
-        std::cout << "\n-------front()------\n";
+        std::cout << "\n---------------front()-------------------\n";
         std::cout << "std_vector.front(): " << std_vector.front() << "\n";
         std::cout << "ft_vector.front(): " << ft_vector.front() << "\n";
-        std::cout << "\n-------back()------\n";
+        std::cout << "\n---------------back()--------------------\n";
         std::cout << "std_vector.back(): " << std_vector.back() << "\n";
         std::cout << "ft_vector.back(): " << ft_vector.back() << "\n";
     }
     {
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Modifiers-------------\n";
-        std::cout << "-----------------------------\n";
-        std::cout << "\n-------1 2 3 4 생성-------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "----------------Modifiers----------------\n";
+        std::cout << "-----------------------------------------\n";
+        std::cout << "\n---------------1 2 3 4 생성--------------\n";
         std::vector<int> std_vector;
         ft::vector<int> ft_vector;
-        std::cout << "\n-------push_back()------\n";
-        std_vector.push_back(1);
-        std_vector.push_back(2);
-        std_vector.push_back(3);
-        std_vector.push_back(4);
-        ft_vector.push_back(1);
-        ft_vector.push_back(2);
-        ft_vector.push_back(3);
-        ft_vector.push_back(4);
-        display_std_vector<int>(std_vector);
-        display_ft_vector<int>(ft_vector);
-        std::cout << "\n-------pop_back()------\n";
-        std_vector.pop_back();
-        std_vector.pop_back();
-        std_vector.pop_back();
-        std_vector.pop_back();
-        ft_vector.pop_back();
-        ft_vector.pop_back();
-        ft_vector.pop_back();
-        ft_vector.pop_back();
-        display_std_vector<int>(std_vector);
-        display_ft_vector<int>(ft_vector);
-
-        std::cout << "\n-------assign(4, 100)------\n";
+        std::cout << "\n---------------assign(4, 100)------------\n";
         std_vector.assign(4, 100);
         ft_vector.assign(4, 100);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
 
-        std::cout << "\n-------erase()------\n";
+        std::cout << "\n-----------------pop_back()--------------\n";
+        std_vector.pop_back();
+        std_vector.pop_back();
+        std_vector.pop_back();
+        std_vector.pop_back();
+        ft_vector.pop_back();
+        ft_vector.pop_back();
+        ft_vector.pop_back();
+        ft_vector.pop_back();
+        display_std_vector<int>(std_vector);
+        display_ft_vector<int>(ft_vector);
+        std::cout << "\n----------------push_back()--------------\n";
+        std_vector.push_back(1);
+        std_vector.push_back(2);
+        std_vector.push_back(3);
+        std_vector.push_back(4);
+        ft_vector.push_back(1);
+        ft_vector.push_back(2);
+        ft_vector.push_back(3);
+        ft_vector.push_back(4);
+        display_std_vector<int>(std_vector);
+        display_ft_vector<int>(ft_vector);
+
+        std::cout << "\n------------erase(begin())---------------\n";
         std::vector<int>::iterator std_iter = std_vector.begin();
         ft::vector<int>::iterator ft_iter = ft_vector.begin();
-        // erase(it);
         std_vector.erase(std_iter);
         ft_vector.erase(ft_iter);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
-        // erase(from, to);
+
+        std::cout << "\n------------erase(begin(), begin() + 2)--\n";
         std_vector.erase(std_iter, std_iter + 2);
         ft_vector.erase(ft_iter, ft_iter + 2);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
 
-        std::cout << "\n-------insert()------\n";
+        std::cout << "\n---------------insert()------------------\n";
         std_vector.insert(std_iter, 50);
         ft_vector.insert(ft_iter, 50);
         display_std_vector<int>(std_vector);
@@ -341,7 +355,7 @@ void    test_vector(void)
         std::cout << "size: " << std_vector.size() << " capacity: " << std_vector.capacity() << "\n";
         std::cout << "size: " << ft_vector.size() << " capacity: " << ft_vector.capacity() << "\n";
                 
-        std::cout << "\n-------clear()------\n";
+        std::cout << "\n---------------clear()-------------------\n";
         std_vector.clear();
         ft_vector.clear();
         display_std_vector<int>(std_vector);
@@ -351,50 +365,52 @@ void    test_vector(void)
         std::cout << "std_vector.empty(): " << std_vector.empty() << "\n";
         std::cout << "ft_vector.empty(): " << ft_vector.empty() << "\n";
         
-        std::cout << "\n-------swap()------\n";
+        std::cout << "\n---------------std_1.swap(std_2)--------\n";
         std::vector<int> std_vector_1(4, 50);
         std::vector<int> std_vector_2(4, 100);
-        std::cout << "\n-------before------\n";
+        std::cout << "\n---------------before-------------------\n";
         display_std_vector<int>(std_vector_1);
         display_std_vector<int>(std_vector_2);
         std_vector_1.swap(std_vector_2);
-        std::cout << "\n-------after------\n";
+        std::cout << "\n---------------after--------------------\n";
         display_std_vector<int>(std_vector_1);
         display_std_vector<int>(std_vector_2);
         ft::vector<int> ft_vector_1(4, 50);
         ft::vector<int> ft_vector_2(4, 100);
-        std::cout << "\n-------before------\n";
+        std::cout << "\n---------------ft_1.swap(ft_2)----------\n";
+        std::cout << "\n---------------before-------------------\n";
         display_ft_vector<int>(ft_vector_1);
         display_ft_vector<int>(ft_vector_2);
         ft_vector_1.swap(ft_vector_2);
-        std::cout << "\n-------after------\n";
+        std::cout << "\n---------------after--------------------\n";
         display_ft_vector<int>(ft_vector_1);
         display_ft_vector<int>(ft_vector_2);
         
     }
     {
-        std::cout << "\n-------swap()------\n";
+        std::cout << "\n---------------swap(std_1, std_2)-------\n";
         std::vector<int> std_vector_1(4, 50);
         std::vector<int> std_vector_2(4, 100);
-        std::cout << "\n-------before------\n";
+        std::cout << "\n---------------before-------------------\n";
         display_std_vector<int>(std_vector_1);
         display_std_vector<int>(std_vector_2);
         swap(std_vector_1, std_vector_2);
-        std::cout << "\n-------after------\n";
+        std::cout << "\n---------------after--------------------\n";
         display_std_vector<int>(std_vector_1);
         display_std_vector<int>(std_vector_2);
         ft::vector<int> ft_vector_1(4, 50);
         ft::vector<int> ft_vector_2(4, 100);
-        std::cout << "\n-------before------\n";
+        std::cout << "\n---------------swap(ft_1, ft_2)---------\n";
+        std::cout << "\n---------------before-------------------\n";
         display_ft_vector<int>(ft_vector_1);
         display_ft_vector<int>(ft_vector_2);
         swap(ft_vector_1, ft_vector_2);
-        std::cout << "\n-------after------\n";
+        std::cout << "\n---------------after--------------------\n";
         display_ft_vector<int>(ft_vector_1);
         display_ft_vector<int>(ft_vector_2);
     }
     {
-        std::cout << "\n-------get_allocator()------\n";
+        std::cout << "\n--------------get_allocator()-----------\n";
         std::vector<int> myvector;
         int * p;
         unsigned int i;
@@ -433,7 +449,7 @@ void    test_vector(void)
         myvector.get_allocator().deallocate(p,5);
     }
     {
-        std::cout << "\n-------operator()------\n";
+        std::cout << "\n----------------operator()---------------\n";
         std::vector<int> std_vector_1;
         std_vector_1.push_back(1);
         std_vector_1.push_back(2);
@@ -474,7 +490,7 @@ void    test_vector(void)
         std::cout << "1 >= 2 --> " << (ft_vector_1 >= ft_vector_2) << "\n";
     }
     {
-        std::cout << "\n-------operator()------\n";
+        std::cout << "\n---------------operator()----------------\n";
         std::vector<int> std_vector_1;
         std_vector_1.push_back(1);
         std_vector_1.push_back(2);
@@ -513,7 +529,7 @@ void    test_vector(void)
         std::cout << "1 >= 2 --> " << (ft_vector_1 >= ft_vector_2) << "\n";
     }
     {
-        std::cout << "\n-------operator()------\n";
+        std::cout << "\n---------------operator()----------------\n";
         std::vector<std::string> std_vector_1;
         std_vector_1.push_back("apple");
         std_vector_1.push_back("banana");
@@ -533,7 +549,7 @@ void    test_vector(void)
         std::cout << "1 >= 2 --> " << (std_vector_1 >= std_vector_2) << "\n";
     }
     {
-        std::cout << "\n-------operator()------\n";
+        std::cout << "\n---------------operator()----------------\n";
         ft::vector<std::string> ft_vector_1;
         ft_vector_1.push_back("apple");
         ft_vector_1.push_back("banana");
@@ -556,7 +572,11 @@ void    test_vector(void)
 
 void    test_vector_Buffer(void)
 {
+    std::cout << "---------------------------------------------\n";
+    std::cout << "-------------Vector Performance--------------\n";
+    std::cout << "---------------------------------------------\n";
 	std::vector<Buffer> std_vector_buffer;
+    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -583,6 +603,11 @@ void    test_vector_Buffer(void)
 	{
 		//NORMAL ! :P
 	}
+    std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+    std::chrono::microseconds std_time = end - start;
+    std::cout << "std::vector time: " << std_time.count() << "\n";
+
+    start = std::chrono::system_clock::now();
 	ft::vector<Buffer> ft_vector_buffer;
 
 	for (int i = 0; i < COUNT; i++)
@@ -610,44 +635,50 @@ void    test_vector_Buffer(void)
 	{
 		//NORMAL ! :P
 	}
+    end = std::chrono::system_clock::now();
+    std::chrono::microseconds ft_time = end - start;
+    ft_time = end - start;
+    std::cout << "ft::vector time: " << ft_time.count() << "\n";
+    double diff = static_cast<double> (std_time.count()) / ft_time.count();
+    std::cout << "time diff: std::vector is " << diff << "x faster" << "\n";
 }
 
-void    test_stack(void)
+void    test_stack_member_function_diff(void)
 {
     {
-        std::cout << "\n------stack<int> 생성-------\n";
+        std::cout << "\n---------------------stack<int> 생성\n";
         std::stack<int> std_stack;
         ft::stack<int> ft_stack;
-        std::cout << "\n------stack.empty()-------\n";
+        std::cout << "\n---------------------stack.empty()\n";
         std::cout << "std_stack.empty(): " << std_stack.empty() << "\n";
         std::cout << "ft_stack.empty():  " << ft_stack.empty() << "\n";
-        std::cout << "\n------stack.size()-------\n";
+        std::cout << "\n---------------------stack.size()\n";
         std::cout << "std_stack.size(): " << std_stack.size() << "\n";
         std::cout << "ft_stack.size():  " << ft_stack.size() << "\n";
-        // std::cout << "\n------stack.top()-------\n";
+        // std::cout << "\n---------------------stack.top()\n";
         // std::cout << "std_stack.top(): " << std_stack.top() << "\n";
         // std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
-        std::cout << "\n------stack.push(123)-------\n";
+        std::cout << "\n---------------------stack.push(123)\n";
         std_stack.push(123);
         ft_stack.push(123);
-        std::cout << "\n------stack.top()-------\n";
+        std::cout << "\n---------------------stack.top()\n";
         std::cout << "std_stack.top(): " << std_stack.top() << "\n";
         std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
-        std::cout << "\n------stack.push(456)-------\n";
+        std::cout << "\n---------------------stack.push(456)\n";
         std_stack.push(456);
         ft_stack.push(456);
-        std::cout << "\n------stack.top()-------\n";
+        std::cout << "\n---------------------stack.top()\n";
         std::cout << "std_stack.top(): " << std_stack.top() << "\n";
         std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
-        std::cout << "\n------stack.pop()-------\n";
+        std::cout << "\n---------------------stack.pop()\n";
         std_stack.pop();
         ft_stack.pop();
-        std::cout << "\n------stack.top()-------\n";
+        std::cout << "\n---------------------stack.top()\n";
         std::cout << "std_stack.top(): " << std_stack.top() << "\n";
         std::cout << "ft_stack.top():  " << ft_stack.top() << "\n";
     }
     {
-        std::cout << "\n-------relational operators------\n";
+        std::cout << "\n----------------------relational operators\n";
         ft::stack<std::string> ft_stack_1;
         ft_stack_1.push("apple");
         ft_stack_1.push("banana");
@@ -655,6 +686,41 @@ void    test_stack(void)
         ft::stack<std::string> ft_stack_2;
         ft_stack_2.push("apple");
         ft_stack_2.push("banana");
+        std::cout << "ft_stack_1: apple, banana, carrot\n";
+        std::cout << "ft_stack_2: apple, banana\n";
+        std::cout << "1 == 2 --> " << (ft_stack_1 == ft_stack_2) << "\n";
+        std::cout << "1 != 2 --> " << (ft_stack_1 != ft_stack_2) << "\n";
+        std::cout << "1 <  2 --> " << (ft_stack_1 < ft_stack_2) << "\n";
+        std::cout << "1 <= 2 --> " << (ft_stack_1 <= ft_stack_2) << "\n";
+        std::cout << "1 >  2 --> " << (ft_stack_1 > ft_stack_2) << "\n";
+        std::cout << "1 >= 2 --> " << (ft_stack_1 >= ft_stack_2) << "\n";
+    }
+    {
+        std::cout << "\n----------------------relational operators\n";
+        ft::stack<std::string> ft_stack_1;
+        ft_stack_1.push("apple");
+        ft_stack_1.push("banana");
+        ft::stack<std::string> ft_stack_2;
+        ft_stack_2.push("apple");
+        ft_stack_2.push("banana");
+        std::cout << "ft_stack_1: apple, banana\n";
+        std::cout << "ft_stack_2: apple, banana\n";
+        std::cout << "1 == 2 --> " << (ft_stack_1 == ft_stack_2) << "\n";
+        std::cout << "1 != 2 --> " << (ft_stack_1 != ft_stack_2) << "\n";
+        std::cout << "1 <  2 --> " << (ft_stack_1 < ft_stack_2) << "\n";
+        std::cout << "1 <= 2 --> " << (ft_stack_1 <= ft_stack_2) << "\n";
+        std::cout << "1 >  2 --> " << (ft_stack_1 > ft_stack_2) << "\n";
+        std::cout << "1 >= 2 --> " << (ft_stack_1 >= ft_stack_2) << "\n";
+    }
+    {
+        std::cout << "\n----------------------relational operators\n";
+        ft::stack<std::string> ft_stack_1;
+        ft_stack_1.push("apple");
+        ft::stack<std::string> ft_stack_2;
+        ft_stack_2.push("apple");
+        ft_stack_2.push("banana");
+        std::cout << "ft_stack_1: apple\n";
+        std::cout << "ft_stack_2: apple, banana\n";
         std::cout << "1 == 2 --> " << (ft_stack_1 == ft_stack_2) << "\n";
         std::cout << "1 != 2 --> " << (ft_stack_1 != ft_stack_2) << "\n";
         std::cout << "1 <  2 --> " << (ft_stack_1 < ft_stack_2) << "\n";
@@ -671,8 +737,15 @@ void    test_stack_Buffer_dequeBuffer()
 	ft::stack<Buffer, std::deque<Buffer> > ft_stack_deq_buffer;
 }
 
+void    test_stack_Buffer_listBuffer()
+{
+	std::stack<Buffer, std::list<Buffer> > std_stack_deq_buffer;
+	ft::stack<Buffer, std::list<Buffer> > ft_stack_deq_buffer;
+}
+
 void    test_mutant_stack_char(void)
 {
+    std::cout << "\n----------------------test mutant stack\n";
     {
         std_MutantStack<char> iterable_stack;
         for (char letter = 'a'; letter <= 'z'; letter++)
@@ -731,30 +804,33 @@ void    display_ft_map_rev(ft::map<Key, T> &ft_map)
     std::cout << "\n";
 }
 
-void    test_map()
+void    test_map_member_function_diff()
 {
     {
-        std::cout << "\n------map<int> 생성-------\n";
+        std::cout << "\n----------------------map<int> 생성\n";
         std::map<int, std::string> std_map;
         ft::map<int, std::string> ft_map;
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Capacity-------------\n";
-        std::cout << "-----------------------------\n";
-        std::cout << "\n------map.empty()-------\n";
+        std::cout << "------------------------------------\n";
+        std::cout << "----------------------Capacity------\n";
+        std::cout << "------------------------------------\n";
+        std::cout << "\n----------------------map.empty()\n";
         std::cout << "std_map.empty(): " << std_map.empty() << "\n";
         std::cout << "ft_map.empty():  " << ft_map.empty() << "\n";
-        std::cout << "\n------map.size()-------\n";
+        std::cout << "\n----------------------map.size()\n";
         std::cout << "std_map.size(): " << std_map.size() << "\n";
         std::cout << "ft_map.size():  " << ft_map.size() << "\n";
-        std::cout << "\n------map.insert(std::make_pair())-------\n";
+        std::cout << "\n----------------------map.insert(std::make_pair())\n";
         std::cout << "std_map.insert(std::make_pair()): " << (*std_map.insert(std::make_pair(1, "apple")).first).second << "\n";
         std::cout << "ft_map.insert(std::make_pair()):  " << (*ft_map.insert(ft::make_pair(1, "apple")).first).second << "\n";
-        std::cout << "\n------map.empty()-------\n";
+        std::cout << "\n----------------------map.empty()\n";
         std::cout << "std_map.empty(): " << std_map.empty() << "\n";
         std::cout << "ft_map.empty():  " << ft_map.empty() << "\n";
-        std::cout << "\n------map.size()-------\n";
+        std::cout << "\n----------------------map.size()\n";
         std::cout << "std_map.size(): " << std_map.size() << "\n";
         std::cout << "ft_map.size():  " << ft_map.size() << "\n";
+        std::cout << "\n----------------------map.max_size()\n";
+        std::cout << "std_map.max_size(): " << std_map.max_size() << "\n";
+        std::cout << "ft_map.max_size():  " << ft_map.max_size() << "\n";
     }
     {
         std::map<int, std::string> std_map;
@@ -765,43 +841,52 @@ void    test_map()
         std_map.insert(std::make_pair(12, "d"));
         std_map.insert(std::make_pair(21, "e"));
         std_map.insert(std::make_pair(22, "f"));
-        ft_map.insert(ft::make_pair(1, "a"));
-        ft_map.insert(ft::make_pair(2, "b"));
         ft_map.insert(ft::make_pair(11, "c"));
         ft_map.insert(ft::make_pair(12, "d"));
         ft_map.insert(ft::make_pair(21, "e"));
         ft_map.insert(ft::make_pair(22, "f"));
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Operations-------------\n";
-        std::cout << "-----------------------------\n";
+        ft_map.insert(ft::make_pair(1, "a"));
+        ft_map.insert(ft::make_pair(1, "a"));
+        ft_map.insert(ft::make_pair(1, "a"));
+        ft_map.insert(ft::make_pair(1, "a"));
+        ft_map.insert(ft::make_pair(2, "b"));
+        std::cout << "------------------------------------\n";
+        std::cout << "---------------------Iterators------\n";
+        std::cout << "------------------------------------\n";
         display_std_map(std_map);
         display_std_map_rev(std_map);
         display_ft_map(ft_map);
         display_ft_map_rev(ft_map);
-        std::cout << "\n------map.count(1)-------\n";
+        std::cout << "-----------------------------------\n";
+        std::cout << "-------------------Operations------\n";
+        std::cout << "-----------------------------------\n";
+        std::cout << "\n----------------------map.count(1)\n";
         std::cout << "std_map.count(1): " << std_map.count(1) << "\n";
         std::cout << "ft_map.count(1):  " << ft_map.count(1) << "\n";
-        std::cout << "\n------map.count(2)-------\n";
+        std::cout << "\n----------------------map.count(2)\n";
         std::cout << "std_map.count(2): " << std_map.count(2) << "\n";
         std::cout << "ft_map.count(2):  " << ft_map.count(2) << "\n";
-        std::cout << "\n------map.find(1)-------\n";
+        std::cout << "\n----------------------map.count(3)\n";
+        std::cout << "std_map.count(3): " << std_map.count(3) << "\n";
+        std::cout << "ft_map.count(3):  " << ft_map.count(3) << "\n";
+        std::cout << "\n----------------------map.find(1)\n";
         std::cout << "std_map.find(1)->second: " << std_map.find(1)->second << "\n";
         std::cout << "ft_map.find(1)->second:  " << ft_map.find(1)->second << "\n";
-        std::cout << "\n------map.lower_bound-------\n";
+        std::cout << "\n----------------------map.lower_bound\n";
         std::cout << "std_map.lower_bound(1)->second: " << std_map.lower_bound(1)->second << "\n";
         std::cout << "std_map.lower_bound(2)->second: " << std_map.lower_bound(2)->second << "\n";
         std::cout << "std_map.lower_bound(3)->second: " << std_map.lower_bound(3)->second << "\n";
         std::cout << "ft_map.lower_bound(1)->second: " << ft_map.lower_bound(1)->second << "\n";
         std::cout << "ft_map.lower_bound(2)->second: " << ft_map.lower_bound(2)->second << "\n";
         std::cout << "ft_map.lower_bound(3)->second: " << ft_map.lower_bound(3)->second << "\n";
-        std::cout << "\n------map.upper_bound-------\n";
+        std::cout << "\n----------------------map.upper_bound\n";
         std::cout << "std_map.upper_bound(1)->second: " << std_map.upper_bound(1)->second << "\n";
         std::cout << "std_map.upper_bound(2)->second: " << std_map.upper_bound(2)->second << "\n";
         std::cout << "std_map.upper_bound(3)->second: " << std_map.upper_bound(3)->second << "\n";
         std::cout << "ft_map.upper_bound(1)->second: " << ft_map.upper_bound(1)->second << "\n";
         std::cout << "ft_map.upper_bound(2)->second: " << ft_map.upper_bound(2)->second << "\n";
         std::cout << "ft_map.upper_bound(3)->second: " << ft_map.upper_bound(3)->second << "\n";
-        std::cout << "\n------map.equal_range-------\n";
+        std::cout << "\n----------------------map.equal_range\n";
         std::cout << "std_map.equal_range(1)->second: " << std_map.equal_range(1).second->second << "\n";
         std::cout << "std_map.equal_range(2)->second: " << std_map.equal_range(2).second->second << "\n";
         std::cout << "std_map.equal_range(3)->second: " << std_map.equal_range(3).second->second << "\n";
@@ -809,26 +894,159 @@ void    test_map()
         std::cout << "ft_map.equal_range(2)->second: " << ft_map.equal_range(2).second->second << "\n";
         std::cout << "ft_map.equal_range(3)->second: " << ft_map.equal_range(3).second->second << "\n";
     }
+    std::cout << "\n----------------------element access\n";
     {
-        std::map<int, std::string> std_map;
-        ft::map<int, std::string> ft_map;
-        std_map.insert(std::make_pair(1, "a"));
-        std_map.insert(std::make_pair(2, "b"));
-        std_map.insert(std::make_pair(11, "c"));
-        std_map.insert(std::make_pair(12, "d"));
-        std_map.insert(std::make_pair(21, "e"));
-        std_map.insert(std::make_pair(22, "f"));
-        ft_map.insert(ft::make_pair(1, "a"));
-        ft_map.insert(ft::make_pair(2, "b"));
-        ft_map.insert(ft::make_pair(11, "c"));
-        ft_map.insert(ft::make_pair(12, "d"));
-        ft_map.insert(ft::make_pair(21, "e"));
-        ft_map.insert(ft::make_pair(22, "f"));
-        std::cout << "-----------------------------\n";
-        std::cout << "--------Operations-------------\n";
-        std::cout << "-----------------------------\n";
-        
+        std::map<char,std::string> mymap;
+
+        mymap['a']="an element";
+        mymap['b']="another element";
+        mymap['c']=mymap['b'];
+
+        std::cout << "mymap['a'] is " << mymap['a'] << '\n';
+        std::cout << "mymap['b'] is " << mymap['b'] << '\n';
+        std::cout << "mymap['c'] is " << mymap['c'] << '\n';
+        std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+
+        std::cout << "mymap now contains " << mymap.size() << " elements.\n";
     }
+    {
+        ft::map<char,std::string> mymap;
+
+        mymap['a']="an element";
+        mymap['b']="another element";
+        mymap['c']=mymap['b'];
+
+        std::cout << "mymap['a'] is " << mymap['a'] << '\n';
+        std::cout << "mymap['b'] is " << mymap['b'] << '\n';
+        std::cout << "mymap['c'] is " << mymap['c'] << '\n';
+        std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+
+        std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+    }
+    std::cout << "\n----------------------map.erase\n";
+    {
+        std::map<char,int> mymap;
+        std::map<char,int>::iterator it;
+
+        // insert some values:
+        mymap['a']=10;
+        mymap['b']=20;
+        mymap['c']=30;
+        mymap['d']=40;
+        mymap['e']=50;
+        mymap['f']=60;
+
+        it=mymap.find('b');
+        mymap.erase (it);                   // erasing by iterator
+
+        mymap.erase ('c');                  // erasing by key
+
+        // show content:
+        for (it=mymap.begin(); it!=mymap.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+    }
+    {
+        ft::map<char,int> mymap;
+        ft::map<char,int>::iterator it;
+
+        // insert some values:
+        mymap['a']=10;
+        mymap['b']=20;
+        mymap['c']=30;
+        mymap['d']=40;
+        mymap['e']=50;
+        mymap['f']=60;
+
+        it=mymap.find('b');
+        mymap.erase (it);                   // erasing by iterator
+
+        mymap.erase ('c');                  // erasing by key
+        // show content:
+        for (it=mymap.begin(); it!=mymap.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+    }
+    std::cout << "\n----------------------map.swap\n";
+    {
+        std::map<char,int> foo,bar;
+
+        foo['x']=100;
+        foo['y']=200;
+
+        bar['a']=11;
+        bar['b']=22;
+        bar['c']=33;
+
+        foo.swap(bar);
+
+        std::cout << "foo contains:\n";
+        for (std::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+
+        std::cout << "bar contains:\n";
+        for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+    }
+    {
+        ft::map<char,int> foo,bar;
+
+        foo['x']=100;
+        foo['y']=200;
+
+        bar['a']=11;
+        bar['b']=22;
+        bar['c']=33;
+
+        foo.swap(bar);
+
+        std::cout << "foo contains:\n";
+        for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+
+        std::cout << "bar contains:\n";
+        for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+    }
+    std::cout << "\n----------------------map.clear\n";
+    {
+        std::map<char,int> mymap;
+
+        mymap['x']=100;
+        mymap['y']=200;
+        mymap['z']=300;
+
+        std::cout << "mymap contains:\n";
+        for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+
+        mymap.clear();
+        mymap['a']=1101;
+        mymap['b']=2202;
+
+        std::cout << "mymap contains:\n";
+        for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+    }
+    {
+        std::map<char,int> mymap;
+
+        mymap['x']=100;
+        mymap['y']=200;
+        mymap['z']=300;
+
+        std::cout << "mymap contains:\n";
+        for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+
+        mymap.clear();
+        mymap['a']=1101;
+        mymap['b']=2202;
+
+        std::cout << "mymap contains:\n";
+        for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+            std::cout << it->first << " => " << it->second << '\n';
+
+    }
+    std::cout << "\n----------------------map.key_compare\n";
     {
         std::map<char,int> mymap;
 
@@ -869,126 +1087,114 @@ void    test_map()
 
         std::cout << '\n';
     }
+    std::cout << "\n----------------------map.value_compare\n";
     {
         std::map<char,int> mymap;
 
-        // first insert function version (single parameter):
-        mymap.insert ( std::pair<char,int>('a',100) );
-        mymap.insert ( std::pair<char,int>('z',200) );
+        mymap['x']=1001;
+        mymap['y']=2002;
+        mymap['z']=3003;
 
-        std::pair<std::map<char,int>::iterator,bool> ret;
-        ret = mymap.insert ( std::pair<char,int>('z',500) );
-        if (ret.second==false) {
-        std::cout << "element 'z' already existed";
-        std::cout << " with a value of " << ret.first->second << '\n';
-        }
-
-        // second insert function version (with hint position):
-        std::map<char,int>::iterator it = mymap.begin();
-        mymap.insert (it, std::pair<char,int>('b',300));  // max efficiency inserting
-        mymap.insert (it, std::pair<char,int>('c',400));  // no max efficiency inserting
-
-        // third insert function version (range insertion):
-        std::map<char,int> anothermap;
-        anothermap.insert(mymap.begin(),mymap.find('c'));
-
-        // showing contents:
         std::cout << "mymap contains:\n";
-        for (it=mymap.begin(); it!=mymap.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
 
-        std::cout << "anothermap contains:\n";
-        for (it=anothermap.begin(); it!=anothermap.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
+        std::pair<char,int> highest = *mymap.rbegin();          // last element
+
+        std::map<char,int>::iterator it = mymap.begin();
+        do {
+            std::cout << it->first << " => " << it->second << '\n';
+        } while ( mymap.value_comp()(*it++, highest) );
     }
     {
         ft::map<char,int> mymap;
 
-        // first insert function version (single parameter):
-        mymap.insert ( ft::pair<char,int>('a',100) );
-        mymap.insert ( ft::pair<char,int>('z',200) );
+        mymap['x']=1001;
+        mymap['y']=2002;
+        mymap['z']=3003;
 
-        ft::pair<ft::map<char,int>::iterator,bool> ret;
-        ret = mymap.insert ( ft::pair<char,int>('z',500) );
-        if (ret.second==false) {
-        std::cout << "element 'z' already existed";
-        std::cout << " with a value of " << ret.first->second << '\n';
-        }
-
-        // second insert function version (with hint position):
-        ft::map<char,int>::iterator it = mymap.begin();
-        mymap.insert (it, ft::pair<char,int>('b',300));  // max efficiency inserting
-        mymap.insert (it, ft::pair<char,int>('c',400));  // no max efficiency inserting
-
-        // third insert function version (range insertion):
-        ft::map<char,int> anothermap;
-        anothermap.insert(mymap.begin(),mymap.find('c'));
-
-        // showing contents:
         std::cout << "mymap contains:\n";
-        for (it=mymap.begin(); it!=mymap.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
 
-        std::cout << "anothermap contains:\n";
-        for (it=anothermap.begin(); it!=anothermap.end(); ++it)
-        std::cout << it->first << " => " << it->second << '\n';
+        ft::pair<char,int> highest = *mymap.rbegin();          // last element
 
-        ft::map<char,int> mymap_2(mymap.begin(), mymap.end());
+        ft::map<char,int>::iterator it = mymap.begin();
+        do {
+            std::cout << it->first << " => " << it->second << '\n';
+        } while ( mymap.value_comp()(*it++, highest) );
     }
 }
 
 void    test_map_int_int()
 {
-    std::map<int, int> map_int;
+    {
 
-	
-	for (int i = 0; i < COUNT; ++i)
-	{
-		map_int.insert(std::make_pair(rand(), rand()));
-	}
+        std::map<int, int> std_map_int;
+        std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
-	int sum = 0;
-	for (int i = 0; i < 10000; i++)
-	{
-		int access = rand();
-		sum += map_int[access];
-	}
-	std::cout << "should    be constant with the same seed: " << sum << std::endl;
+        
+        for (int i = 0; i < COUNT; ++i)
+        {
+            std_map_int.insert(std::make_pair(rand(), rand()));
+        }
 
-	{
-		std::map<int, int> copy = map_int;
-	}
+        int sum = 0;
+        for (int i = 0; i < 1000; i++)
+        {
+            int access = rand();
+            sum += std_map_int[access];
+        }
+        std::cout << "should    be constant with the same seed: " << sum << std::endl;
+
+        {
+            std::map<int, int> copy = std_map_int;
+        }
+        std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+        std::chrono::microseconds std_time = end - start;
+        std::cout << "std::map time: " << std_time.count() << "\n";
+
+        ft::map<int, int> ft_map_int;
+
+        
+        start = std::chrono::system_clock::now();
+        for (int i = 0; i < COUNT; ++i)
+        {
+            ft_map_int.insert(ft::make_pair(rand(), rand()));
+        }
+
+        sum = 0;
+        for (int i = 0; i < 1000; i++)
+        {
+            int access = rand();
+            sum += ft_map_int[access];
+        }
+        std::cout << "should    be constant with the same seed: " << sum << std::endl;
+
+        {
+            ft::map<int, int> copy = ft_map_int;
+        }
+        end = std::chrono::system_clock::now();
+        std::chrono::microseconds ft_time = end - start;
+        std::cout << "ft::map time: " << ft_time.count() << "\n";
+    }
+
 }
 
-int main(int argc, char** argv) {
-	if (argc != 2)
-	{
-		std::cerr << "Usage: ./test seed" << std::endl;
-		std::cerr << "Provide a seed    please" << std::endl;
-		std::cerr << "Count value:" << COUNT << std::endl;
-		return 1;
-	}
-	const int seed  = atoi(argv[0]);
-	srand(seed);
-    
-
-    test_pair();
-/*
-**  vector test 
-*/
-    test_vector();
-    test_vector_Buffer();
-/*
-**  stack test 
-*/
-    test_stack();
-    test_stack_Buffer_dequeBuffer();
-    test_mutant_stack_char();
-/*
-**  map test 
-*/
-    test_map();
+int main(void)
+{
+    /*
+    **  vector test 
+    */
+    // test_vector_member_function_diff();
+    // test_vector_Buffer();
+    /*
+    **  stack test 
+    */
+    // test_stack_member_function_diff();
+    // test_stack_Buffer_dequeBuffer();
+    // test_mutant_stack_char();
+    /*
+    **  map test 
+    */
+    test_map_member_function_diff();
     test_map_int_int();
-
+    // system("leaks container");
 	return (0);
 }

@@ -335,11 +335,17 @@ namespace ft
             // _last_node->left = first node
             node_pointer                _last_node;
             node_alloc                  _node_alloc;
+            int                         _size;
+            node_pointer                _min;
+            node_pointer                _max;
         
         public:
             BST (const node_alloc& _node_alloc_init = node_alloc())
             :
-                _node_alloc(_node_alloc_init)
+                _node_alloc(_node_alloc_init),
+                _size(0),
+                _min(0),
+                _max(0)
             {
                 _last_node = _node_alloc.allocate(1);
                 _node_alloc.construct(_last_node, Node(_last_node, _last_node, _last_node));
@@ -348,6 +354,10 @@ namespace ft
             {
                 _node_alloc.destroy(_last_node);
                 _node_alloc.deallocate(_last_node, 1);
+            }
+            int getSize() const
+            {
+                return _size;
             }
             ft::pair<iterator, bool> insertPair(value_type to_insert)
             {
@@ -383,16 +393,22 @@ namespace ft
 
                 // BST가 비어있을 때
                 if (prev_node == _last_node)
+                {
                     _last_node->parent = new_node;
+                    _last_node->left = new_node;
+                    _last_node->right = new_node;
+                }
                 // 제일 아래 노드까지 왔을 때 그 노드의 key보다 insert할 key가 크다면
                 else if (side == true)
                     prev_node->right = new_node;
                 else
                     prev_node->left = new_node;
 
-                _last_node->left = _BST_get_lower_node(_last_node->parent);
-                _last_node->right = _BST_get_higher_node(_last_node->parent);
-                _last_node->value.first += 1;
+                if (_last_node->left->value.first > new_node->value.first)
+                    _last_node->left = new_node;
+                if (_last_node->right->value.first < new_node->value.first)
+                    _last_node->right = new_node;
+                _size += 1;
                 return (ft::make_pair(iterator(new_node, _last_node), true));
             }
             void removeByKey(value_type to_remove)
@@ -473,7 +489,7 @@ namespace ft
                 
                 _last_node->left = _BST_get_lower_node(_last_node->parent);
                 _last_node->right = _BST_get_higher_node(_last_node->parent);
-                _last_node->value.first -= 1;
+                _size -= 1;
 
 
                 _node_alloc.destroy(remove_node);
@@ -485,11 +501,7 @@ namespace ft
                 if (remove_node->parent == _last_node)
                     _last_node->parent = new_node;
                 else
-                {
-                    // // 지울지 말지 생각중
-                    // if (remove_node == _last_node->parent)
-                    //     _last_node->parent = new_node;
-                    
+                {   
                     // parent의 left 혹은 right를 new_node로 대체
                     if (remove_node == remove_node->parent->left)
                         remove_node->parent->left = new_node;
@@ -499,7 +511,7 @@ namespace ft
 
                 _last_node->left = _BST_get_lower_node(_last_node->parent);
                 _last_node->right = _BST_get_higher_node(_last_node->parent);
-                _last_node->value.first -= 1;
+                _size -= 1;
 
                 // new_node의 parent를 지울 node의 parent로 교체
                 new_node->parent = remove_node->parent;
@@ -514,10 +526,16 @@ namespace ft
                     return ;
                 // 찾으려는 값이 노드 값보다 작은 경우 
                 if (pair.first < node->value.first)
+                {
                     _removeByKey(node->left, pair);
+                    return ;
+                }
                 // 찾으려는 값이 노드 값보다 큰 경우 
-                else if (pair.first > node->value.first)
+                if (pair.first > node->value.first)
+                {
                     _removeByKey(node->right, pair);
+                    return ;
+                }
                 // 찾았는데 찾은 노드가 left, right 둘다 있다면
                 if (node->left != _last_node && node->right != _last_node)
                 {

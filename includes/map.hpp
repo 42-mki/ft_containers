@@ -122,7 +122,7 @@ namespace ft
             //https://www.cplusplus.com/reference/map/map/empty/
             bool empty() const { return _bst._last_node->parent == _bst._last_node; }
             // https://www.cplusplus.com/reference/map/map/size/
-            size_type size() const { return _bst._last_node->value.first; }
+            size_type size() const { return _bst.getSize(); }
             size_type max_size() const { return _bst.max_size(); }
             // // Modifiers
             void clear()
@@ -133,7 +133,7 @@ namespace ft
             pair<iterator, bool> insert (const value_type &val)
             {
                 return _bst.insertPair(val);
-                }
+            }
             iterator insert (iterator position, const value_type& val)
             {
                 (void)position;

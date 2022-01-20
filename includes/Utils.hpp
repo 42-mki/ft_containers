@@ -5,6 +5,7 @@
 
 // nullptr
 // NULL은 문제가 있어서 C++11에서 도입되었습니다
+// 함수 오버로딩시 NULL을 인자로 주는 경우 NULL을 int 0으로 인식합니다.
 
 const class
 {

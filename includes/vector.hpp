@@ -70,6 +70,26 @@ namespace ft
                 _end++;
             }
         }
+        template <class InputIterator>
+        vector (InputIterator first, InputIterator last,
+                const allocator_type& alloc = allocator_type(),
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr)
+        :
+            _alloc(alloc)
+        {
+            if (!ft::is_ft_iterator_tagged<typename ft::iterator_traits<InputIterator>::iterator_category >::value)
+                throw (ft::invalid_iterator_exception<void>());
+            
+            difference_type n = ft::distance(first, last);
+            _begin = _alloc.allocate( n );
+            _end_cap = _begin + n;
+            _end = _begin;
+            while (n--)
+            {
+                _alloc.construct(_end, *first++);
+                _end++;
+            }
+        }        
         vector(const vector &v)
         :
             _alloc(v._alloc),
@@ -475,7 +495,6 @@ namespace ft
         iterator erase(iterator position)
         {
             pointer p_pos = &(*position);
-            _alloc.destroy(&(*position));
             if (&(*position) + 1 == _end)
                 _alloc.destroy(&(*position));
             else
