@@ -325,9 +325,9 @@ void    test_vector_member_function_diff(void)
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
 
-        std::cout << "\n------------erase(begin(), begin() + 2)--\n";
-        std_vector.erase(std_iter, std_iter + 2);
-        ft_vector.erase(ft_iter, ft_iter + 2);
+        std::cout << "\n------------erase(begin(), begin() + 3)--\n";
+        std_vector.erase(std_iter, std_iter + 3);
+        ft_vector.erase(ft_iter, ft_iter + 3);
         display_std_vector<int>(std_vector);
         display_ft_vector<int>(ft_vector);
 
@@ -808,6 +808,11 @@ void    test_map_member_function_diff()
 {
     {
         std::cout << "\n----------------------map<int> 생성\n";
+
+
+
+
+
         std::map<int, std::string> std_map;
         ft::map<int, std::string> ft_map;
         std::cout << "------------------------------------\n";
@@ -1182,19 +1187,19 @@ int main(void)
     /*
     **  vector test 
     */
-    // test_vector_member_function_diff();
-    // test_vector_Buffer();
+    test_vector_member_function_diff();
+    test_vector_Buffer();
     /*
     **  stack test 
     */
-    // test_stack_member_function_diff();
-    // test_stack_Buffer_dequeBuffer();
-    // test_mutant_stack_char();
+    test_stack_member_function_diff();
+    test_stack_Buffer_dequeBuffer();
+    test_mutant_stack_char();
     /*
     **  map test 
     */
     test_map_member_function_diff();
     test_map_int_int();
-    // system("leaks container");
+    system("leaks container");
 	return (0);
 }

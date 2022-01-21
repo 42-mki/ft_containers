@@ -89,7 +89,7 @@ namespace ft
                 _alloc.construct(_end, *first++);
                 _end++;
             }
-        }        
+        }
         vector(const vector &v)
         :
             _alloc(v._alloc),
@@ -495,6 +495,7 @@ namespace ft
         iterator erase(iterator position)
         {
             pointer p_pos = &(*position);
+            
             if (&(*position) + 1 == _end)
                 _alloc.destroy(&(*position));
             else
